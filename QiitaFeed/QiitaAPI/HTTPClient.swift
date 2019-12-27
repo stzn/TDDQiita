@@ -18,7 +18,7 @@ protocol HTTPClientTask {
 }
 
 protocol HTTPClient {
-    typealias Result = Swift.Result<Data, HTTPClientError>
+    typealias Result = Swift.Result<(Data, HTTPURLResponse), HTTPClientError>
     typealias Completion = (Result) -> Void
 
     @discardableResult

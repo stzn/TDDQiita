@@ -35,7 +35,7 @@ final class RemoteQiitaImageLoader: QiitaImageLoader {
         let task = RemoteQiitaImageLoaderTask(completion)
         task.task = client.get(from: url) { result in
             switch result {
-            case .success(let data):
+            case .success(let data, _):
                 task.complete(with: .success(data))
             case .failure(let error):
                 task.complete(with: .failure(error))

@@ -23,7 +23,7 @@ final class RemoteQiitaLoader: QiitaLoader {
     func load(completion: @escaping (QiitaLoader.Result) -> Void) {
         client.get(from: url) { result in
             switch result {
-            case .success(let data):
+            case .success(let data, let response):
                 do {
                     let items = try JSONDecoder().decode([QiitaItem].self, from: data)
                     completion(.success(items))

@@ -68,14 +68,15 @@ class URLSessionHTTPClientTests: XCTestCase {
     func testGet() {
         let data = anyData
         let error = anyNSError
+        let response = anyHTTPURLResponse
 
-        let testCases: [(result: URLSessionHTTPClient.Result, data: Data?, response: HTTPURLResponse?, error: Error?)] = [
-            (.success(data), data, anyHTTPURLResponse, nil),
-            (.failure(.unknown(error)), anyData, anyHTTPURLResponse, error),
-            (.failure(.unknown(error)), nil, nil, error)
+        let testCases: [UInt: (result: URLSessionHTTPClient.Result, data: Data?, response: HTTPURLResponse?, error: Error?)] = [
+            #line: (.success((data, response)), data, response, nil),
+            #line: (.failure(.unknown(error)), anyData, response, error),
+            #line: (.failure(.unknown(error)), nil, nil, error)
         ]
-        for testCase in testCases {
-            expect(testCase.result, data: testCase.data, response: testCase.response, error: testCase.error)
+        for (line, testCase) in testCases {
+            expect(testCase.result, data: testCase.data, response: testCase.response, error: testCase.error, line: line)
         }
     }
 
@@ -101,7 +102,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
 
         switch (received, expected) {
-        case (.success(let received), .success(let expected)):
+        case (.success(let (received, _)), .success(let (expected, _))):
             XCTAssertEqual(received, expected, file: file, line:line)
         case (.failure(let received), .failure(let expected)):
             XCTAssertEqual(received as NSError, expected as NSError, file: file, line:line)

@@ -12,7 +12,7 @@ import XCTest
 class RemoteQiitaImageLoaderTests: XCTestCase {
     func testFetchDataFetched() {
         let data = anyData
-        expect(.success(data), responseResult: .success(data))
+        expect(.success(data), responseResult: .success((data, anyHTTPURLResponse)))
     }
 
     func testFetchRequestError() {
@@ -30,7 +30,7 @@ class RemoteQiitaImageLoaderTests: XCTestCase {
             exp.fulfill()
         }
         task.cancel()
-        client.completeWith(result: .success(data))
+        client.completeWith(result: .success((data, anyHTTPURLResponse)))
 
         let result = XCTWaiter.wait(for: [exp], timeout: 0.5)
         switch result {

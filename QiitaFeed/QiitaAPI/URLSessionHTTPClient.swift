@@ -34,7 +34,7 @@ final class URLSessionHTTPClient: HTTPClient {
                 return
             }
 
-            completion(.success(data))
+            completion(.success((data, response)))
         }
         task.resume()
         return task

@@ -12,11 +12,11 @@ import XCTest
 class RemoteQiitaLoaderTests: XCTestCase {
     func testFetchItemsFetched() {
         let item = anyQiitaItem
-        expect([item], responseResult: .success(encode([item])))
+        expect([item], responseResult: .success((encode([item]), anyHTTPURLResponse)))
     }
 
     func testFetchEmptyNoItemFetched() {
-        expect([], responseResult: .success(encode([])))
+        expect([], responseResult: .success((encode([]), anyHTTPURLResponse)))
     }
 
     func testFetchLoadError() {
@@ -26,7 +26,7 @@ class RemoteQiitaLoaderTests: XCTestCase {
 
     func testFetchDecodeError() {
         expectError(.invalidData,
-                    responseResult: .success(anyData))
+                    responseResult: .success((anyData, anyHTTPURLResponse)))
     }
 
     // MARK: Helpers
