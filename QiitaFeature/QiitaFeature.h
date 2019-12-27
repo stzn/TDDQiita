@@ -2,7 +2,7 @@
 //  QiitaFeature.h
 //  QiitaFeature
 //
-//  Created by shinzan_takata on 2019/12/27.
+//  Created by Shinzan Takata on 2019/12/28.
 //  Copyright © 2019 shiz. All rights reserved.
 //
 

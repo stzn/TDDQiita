@@ -80,7 +80,7 @@ class QiitaListViewControllerTests: XCTestCase {
         loader.complete(with: .success([item]))
         assertThat(vc: vc, isRendering: [item])
 
-        loader.complete(with: .success([item, item2, item3]))
+        loader.complete(with: .success([item2, item3]))
         assertThat(vc: vc, isRendering: [item, item2, item3])
     }
 
@@ -132,12 +132,12 @@ class QiitaListViewControllerTests: XCTestCase {
         let view0 = vc.simulateRenderedViewNotVisible(at: 0)
         loader.completeImageLoad(with: .success(anyImageData), at: 0)
         XCTAssertEqual(loader.canceledURLs, [item0.userImageURL])
-        XCTAssertEqual(view0?.userImage, vc.noUserImageData)
+        XCTAssertEqual(view0?.userImage, noUserImageData)
 
         let view1 = vc.simulateRenderedViewNotVisible(at: 1)
         loader.completeImageLoad(with: .success(anyImageData), at: 1)
         XCTAssertEqual(loader.canceledURLs, [item0.userImageURL, item1.userImageURL!])
-        XCTAssertEqual(view1?.userImage, vc.noUserImageData)
+        XCTAssertEqual(view1?.userImage, noUserImageData)
     }
 
     func testShowIndicatorWhenImageLoading() {
@@ -186,7 +186,7 @@ class QiitaListViewControllerTests: XCTestCase {
 
         let view0 = vc.simulateRenderedViewVisible(at: 0)
         loader.completeImageLoad(with: .success(Data("invalid data".utf8)), at: 0)
-        XCTAssertEqual(view0?.userImage, vc.noUserImageData)
+        XCTAssertEqual(view0?.userImage, noUserImageData)
     }
 
     func testNoUserImageRenderWhenErrorOccured() {
@@ -197,7 +197,7 @@ class QiitaListViewControllerTests: XCTestCase {
 
         let view0 = vc.simulateRenderedViewVisible(at: 0)
         loader.completeImageLoad(with: .failure(anyNSError), at: 0)
-        XCTAssertEqual(view0?.userImage, vc.noUserImageData)
+        XCTAssertEqual(view0?.userImage, noUserImageData)
     }
 
     func testNotImageRenderWhenCellNotVisibleAnymore() {
@@ -295,7 +295,7 @@ class QiitaListViewControllerTests: XCTestCase {
     // MARK: Helpers
     private func makeTestTarget(file: StaticString = #file, line: UInt = #line) -> (QiitaListViewController, QiitaLoaderSpy) {
         let loader = QiitaLoaderSpy()
-        let vc = QiitaListViewController.instance(listLoader: loader, imageLoader: loader)
+        let vc = QiitaListUIComposer.composeQiitaListViewController(listLoader: loader, imageLoader: loader)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(vc, file: file, line: line)
         return (vc, loader)
@@ -303,5 +303,9 @@ class QiitaListViewControllerTests: XCTestCase {
 
     private var anyImageData: Data {
         UIImage.make(color: .black).pngData()!
+    }
+
+    private var noUserImageData: Data {
+        noUserImage.pngData()!
     }
 }

@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import QiitaFeature
 
-class QiitaListCell: UITableViewCell {
+final class QiitaListCell: UITableViewCell {
     @IBOutlet private(set) weak var titleLabel: UILabel!
     @IBOutlet private(set) weak var userNameLabel: UILabel!
     @IBOutlet private(set) weak var likeCountLabel: UILabel!
@@ -23,13 +22,13 @@ class QiitaListCell: UITableViewCell {
         resetUI()
     }
 
-    func configure(_ item: QiitaItem) {
+    func configure(_ item: DisplayQiitaItem) {
         resetUI()
         titleLabel.text = item.title
-        userNameLabel.text = item.user?.githubLoginName
-        likeCountLabel.text = String(item.likesCount)
-        commentCountLabel.text = String(item.commentsCount)
-        updatedAtLabel.text = item.updatedAt.description
+        userNameLabel.text = item.userName
+        likeCountLabel.text = item.likesCount
+        commentCountLabel.text = item.commentsCount
+        updatedAtLabel.text = item.updatedAt
     }
 
     private func resetUI() {

@@ -6,7 +6,6 @@
 //  Copyright © 2019 shiz. All rights reserved.
 //
 
-import Foundation
 import QiitaFeature
 
 final class QiitaListImageViewModel {

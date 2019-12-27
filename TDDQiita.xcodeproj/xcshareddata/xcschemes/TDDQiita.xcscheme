@@ -42,9 +42,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "74DE15FB23B5BBA300774A9F"
-               BuildableName = "QiitaFeatureTests.xctest"
-               BlueprintName = "QiitaFeatureTests"
+               BlueprintIdentifier = "D659DEB423A5A52100BE2FCD"
+               BuildableName = "QiitaFeedTests.xctest"
+               BlueprintName = "QiitaFeedTests"
                ReferencedContainer = "container:TDDQiita.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -52,9 +52,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D659DEB423A5A52100BE2FCD"
-               BuildableName = "QiitaFeedTests.xctest"
-               BlueprintName = "QiitaFeedTests"
+               BlueprintIdentifier = "D661630523B69C0500394232"
+               BuildableName = "QiitaFeatureTests.xctest"
+               BlueprintName = "QiitaFeatureTests"
                ReferencedContainer = "container:TDDQiita.xcodeproj">
             </BuildableReference>
          </TestableReference>

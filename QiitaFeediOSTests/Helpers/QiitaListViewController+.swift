@@ -71,9 +71,10 @@ extension QiitaListViewController {
         let indexPath = IndexPath(row: row, section: sectionForItems)
         return dataSource?.tableView(tableView, cellForRowAt: indexPath) as? QiitaListCell
     }
+}
 
+extension QiitaListCellController {
     var noUserImageData: Data {
         noUserImage.pngData()!
     }
 }
-

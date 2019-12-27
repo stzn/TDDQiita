@@ -1,6 +1,6 @@
 //
 //  QiitaImageLoader.swift
-//  QiitaFeed
+//  QiitaFeature
 //
 //  Created by Shinzan Takata on 2019/12/15.
 //  Copyright © 2019 shiz. All rights reserved.

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import QiitaFeature
 
 final class QiitaListViewController: UIViewController, StoryboardInstantiatable {
     @IBOutlet private(set) weak var tableView: UITableView!
@@ -18,34 +17,23 @@ final class QiitaListViewController: UIViewController, StoryboardInstantiatable 
         case main
     }
 
-    let noUserImage = UIImage(systemName: "nosign")!
+    private var dataSource: UITableViewDiffableDataSource<Section, DisplayQiitaItem>!
 
-    private var dataSource: UITableViewDiffableDataSource<Section, QiitaItem>!
-    private var viewModels: [IndexPath: QiitaListImageViewModel] = [:]
+    var cellControllers: [QiitaListCellController] = []
 
     private(set) var refreshControl = UIRefreshControl()
 
-    private(set) var imageLoader: QiitaImageLoader!
-    private var viewModel: QiitaListViewModel!
+    var viewModel: QiitaListViewModel!
 
     private var isLoading: Bool {
         return indicator.isAnimating || refreshControl.isRefreshing
-    }
-
-    static func instance(listLoader: QiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
-        let vc = instantiate()
-        vc.viewModel = QiitaListViewModel(loader: listLoader)
-        vc.imageLoader = imageLoader
-        return vc
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setRefreshControl()
         setupTableView()
-        load(with: indicator) { [weak self] items in
-            self?.reloadTableViewIfNeeded(with: items)
-        }
+        load(shouldRefresh: false)
     }
 
     private func setRefreshControl() {
@@ -54,97 +42,74 @@ final class QiitaListViewController: UIViewController, StoryboardInstantiatable 
     }
 
     @objc func refresh() {
-        load(with: refreshControl) { [weak self] items in
-            self?.reloadTableViewIfNeeded(with: items)
-        }
+        load(shouldRefresh: true)
+    }
+
+    func configureRefreshControl() {
+        refreshControl.isRefreshing ?
+            refreshControl.endRefreshing()
+            : refreshControl.beginRefreshing()
+    }
+
+    func configureIndicator() {
+        indicator.isAnimating ?
+            indicator.stopAnimating()
+            : indicator.startAnimating()
     }
 
     private func setupTableView() {
         tableView.delegate = self
         tableView.prefetchDataSource = self
         setupDataSource()
+        initTableView()
     }
 
-    private func load(with indicator: LoadingIndicator,
-                      completion: @escaping ([QiitaItem]?) -> Void) {
+    private func load(shouldRefresh: Bool) {
         errorView.message = nil
-        indicator.startLoading()
-        viewModel.load { [weak self] result in
-            defer {
-                indicator.stopLoading()
-            }
-            switch result {
-            case .success(let items):
-                completion(items)
-            case .failure(let error):
-                self?.errorView?.message = error.localizedDescription
-                completion(nil)
-            }
+        if shouldRefresh {
+            viewModel.refresh()
+        } else {
+            viewModel.load()
         }
     }
 
-    private func reloadTableViewIfNeeded(with items: [QiitaItem]?) {
-        guard let items = items else {
-            return
-        }
-        var snapshot = NSDiffableDataSourceSnapshot<Section, QiitaItem>()
+    func initTableView() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, DisplayQiitaItem>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(items)
+        snapshot.appendItems(cellControllers.map { $0.item })
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    private func updateTableViewIfNeeded(with items: [QiitaItem]?) {
-        guard let items = items else {
-            return
-        }
+    func updateTableView() {
         var snapshot = dataSource.snapshot()
-        var currentItems = snapshot.itemIdentifiers
-        currentItems.append(contentsOf: items)
-        snapshot.appendItems(currentItems, toSection: .main)
+        snapshot.appendItems(cellControllers.map { $0.item }, toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: false)
+    }
+
+    func setError(_ error: Error) {
+        errorView.message = error.localizedDescription
     }
 
     private func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<Section, QiitaItem>(tableView: tableView) { [weak self] _, indexPath, item in
+        dataSource = UITableViewDiffableDataSource<Section, DisplayQiitaItem>(tableView: tableView) { [weak self] _, indexPath, item in
             return self?.cellForRowAt(indexPath: indexPath, with: item)
         }
-        reloadTableViewIfNeeded(with: [])
+        var snapshot = NSDiffableDataSourceSnapshot<Section, DisplayQiitaItem>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems([])
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     @discardableResult
-    private func cellForRowAt(indexPath: IndexPath, with item: QiitaItem) -> QiitaListCell? {
-        let cell: QiitaListCell = tableView.dequeueReusableCell()
-        cell.configure(item)
-        renderUserImageIfNeeded(for: cell, at: indexPath, with: item)
-        return cell
-    }
-
-    private func renderUserImageIfNeeded(for cell: QiitaListCell, at indexPath: IndexPath, with item: QiitaItem) {
-        guard let url = item.user?.userImageURL else {
-            return
-        }
-
-        cell.startImageLoading()
-        loadImage(from: url, at: indexPath) { [weak self, weak cell] data in
-            cell?.setUserImage(data: data, defaultImage: self!.noUserImage)
-            cell?.stopImageLoading()
-            self?.viewModels[indexPath] = nil
-        }
-    }
-
-    private func loadImage(from url: URL, at indexPath: IndexPath,
-                           completion: @escaping (Data?) -> Void) {
-        let viewModel = QiitaListImageViewModel(loader: imageLoader)
-        viewModel.load(from: url) { result in
-            completion(try? result.get())
-        }
-        viewModels[indexPath] = viewModel
+    private func cellForRowAt(indexPath: IndexPath, with item: DisplayQiitaItem) -> UITableViewCell? {
+        return cellControllers[indexPath.row].cell(for: tableView, at: indexPath) as! QiitaListCell
     }
 }
 
 extension QiitaListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cacncelTask(at: indexPath)
+        cellControllers[indexPath.row].cancel()
+        cacncel(at: indexPath)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -152,9 +117,7 @@ extension QiitaListViewController: UITableViewDelegate {
             return
         }
         if lastIndexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
-            load(with: indicator) { [weak self] items in
-                self?.updateTableViewIfNeeded(with: items)
-            }
+            load(shouldRefresh: false)
         }
     }
 }
@@ -162,20 +125,15 @@ extension QiitaListViewController: UITableViewDelegate {
 extension QiitaListViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            guard let item = dataSource.itemIdentifier(for: indexPath),
-                let url = item.userImageURL else {
-                return
-            }
-            loadImage(from: url, at: indexPath) { _ in }
+            cellControllers[indexPath.row].preload()
         }
     }
 
     func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach(cacncelTask(at:))
+        indexPaths.forEach(cacncel(at:))
     }
 
-    private func cacncelTask(at indexPath: IndexPath) {
-        viewModels[indexPath]?.cancel()
-        viewModels[indexPath] = nil
+    private func cacncel(at indexPath: IndexPath) {
+        cellControllers[indexPath.row].cancel()
     }
 }
