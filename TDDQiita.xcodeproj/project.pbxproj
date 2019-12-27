@@ -49,6 +49,8 @@
 		D67199AB23A5C04700BF1B45 /* TestDatas.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67199AA23A5C04700BF1B45 /* TestDatas.swift */; };
 		D67199AD23A5C45900BF1B45 /* RemoteQiitaImageLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67199AC23A5C45900BF1B45 /* RemoteQiitaImageLoaderTests.swift */; };
 		D67199AF23A5C53400BF1B45 /* HTTPClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67199AE23A5C53400BF1B45 /* HTTPClientSpy.swift */; };
+		D683D11C23B588C500B2F6FF /* WebLinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D683D11B23B588C500B2F6FF /* WebLinking.swift */; };
+		D683D11E23B5890900B2F6FF /* WebLinkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D683D11D23B5890900B2F6FF /* WebLinkingTests.swift */; };
 		D6B1B41623ADAEE700429B47 /* CachedQiitaImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B1B41523ADAEE700429B47 /* CachedQiitaImage.swift */; };
 		D6B1B41823ADB2F000429B47 /* ValidateQiitaCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B1B41723ADB2F000429B47 /* ValidateQiitaCacheTests.swift */; };
 		D6B1B41A23ADB4EC00429B47 /* QiitaCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B1B41923ADB4EC00429B47 /* QiitaCache.swift */; };
@@ -170,6 +172,8 @@
 		D67199AA23A5C04700BF1B45 /* TestDatas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDatas.swift; sourceTree = "<group>"; };
 		D67199AC23A5C45900BF1B45 /* RemoteQiitaImageLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteQiitaImageLoaderTests.swift; sourceTree = "<group>"; };
 		D67199AE23A5C53400BF1B45 /* HTTPClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientSpy.swift; sourceTree = "<group>"; };
+		D683D11B23B588C500B2F6FF /* WebLinking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebLinking.swift; sourceTree = "<group>"; };
+		D683D11D23B5890900B2F6FF /* WebLinkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebLinkingTests.swift; sourceTree = "<group>"; };
 		D6B1B41523ADAEE700429B47 /* CachedQiitaImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedQiitaImage.swift; sourceTree = "<group>"; };
 		D6B1B41723ADB2F000429B47 /* ValidateQiitaCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateQiitaCacheTests.swift; sourceTree = "<group>"; };
 		D6B1B41923ADB4EC00429B47 /* QiitaCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiitaCache.swift; sourceTree = "<group>"; };
@@ -312,6 +316,7 @@
 				D62D175423A5F4AF006B1385 /* RemoteQiitaImageLoader.swift */,
 				D659DEA623A5A41700BE2FCD /* RemoteQiitaLoader.swift */,
 				D67199A523A5A71100BF1B45 /* URLSessionHTTPClient.swift */,
+				D683D11B23B588C500B2F6FF /* WebLinking.swift */,
 			);
 			path = QiitaAPI;
 			sourceTree = "<group>";
@@ -345,6 +350,7 @@
 				D67199AC23A5C45900BF1B45 /* RemoteQiitaImageLoaderTests.swift */,
 				D6B3610523A4740900B54365 /* RemoteQiitaLoaderTests.swift */,
 				D67199A823A5A75200BF1B45 /* URLSessionHTTPClientTests.swift */,
+				D683D11D23B5890900B2F6FF /* WebLinkingTests.swift */,
 			);
 			path = QiitaAPI;
 			sourceTree = "<group>";
@@ -689,6 +695,7 @@
 				D6B1B41A23ADB4EC00429B47 /* QiitaCache.swift in Sources */,
 				D659DECD23A5A56E00BE2FCD /* HTTPClient.swift in Sources */,
 				74F7B9B123A9A42600D01296 /* CachedQiitaItem.swift in Sources */,
+				D683D11C23B588C500B2F6FF /* WebLinking.swift in Sources */,
 				746271E423AC4FC40096FEF3 /* QiitaImageStore.swift in Sources */,
 				D62D175223A5F360006B1385 /* QiitaLoader.swift in Sources */,
 				D659DECE23A5A56E00BE2FCD /* RemoteQiitaLoader.swift in Sources */,
@@ -714,6 +721,7 @@
 				D67199A923A5A75200BF1B45 /* URLSessionHTTPClientTests.swift in Sources */,
 				D67199AD23A5C45900BF1B45 /* RemoteQiitaImageLoaderTests.swift in Sources */,
 				D67199AF23A5C53400BF1B45 /* HTTPClientSpy.swift in Sources */,
+				D683D11E23B5890900B2F6FF /* WebLinkingTests.swift in Sources */,
 				74F7B9B723A9B1AD00D01296 /* QiitaStoreSpy.swift in Sources */,
 				746271E623AC4FF80096FEF3 /* QiitaImageStoreSpy.swift in Sources */,
 			);
