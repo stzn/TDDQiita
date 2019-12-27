@@ -1,24 +1,20 @@
 //
-//  QiitaStore.swift
+//  QiitaCache.swift
 //  QiitaFeed
 //
-//  Created by shinzan_takata on 2019/12/18.
+//  Created by Shinzan Takata on 2019/12/21.
 //  Copyright © 2019 shiz. All rights reserved.
 //
 
 import Foundation
 
-public protocol QiitaStore {
-    typealias GetResult = Result<CachedQiitaItem?, Error>
-    typealias GetCompletion = (GetResult) -> Void
-    func get(completion: @escaping GetCompletion)
-
+protocol QiitaCache {
     typealias SaveResult = Result<Void, Error>
     typealias SaveCompletion = (SaveResult) -> Void
-    func save(_ item: CachedQiitaItem, completion: @escaping SaveCompletion)
 
     typealias DeleteResult = Result<Void, Error>
     typealias DeleteCompletion = (DeleteResult) -> Void
+
+    func save(_ item: CachedQiitaItem, completion: @escaping SaveCompletion)
     func delete(completion: @escaping DeleteCompletion)
 }
-

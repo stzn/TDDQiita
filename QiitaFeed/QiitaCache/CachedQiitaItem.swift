@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QiitaFeature
 
-public struct CachedQiitaItem: Equatable {
+struct CachedQiitaItem: Equatable {
     public let items: [QiitaItem]
     public let timestamp: Date
 
