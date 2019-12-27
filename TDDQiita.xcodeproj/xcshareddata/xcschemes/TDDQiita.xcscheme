@@ -38,16 +38,6 @@
                ReferencedContainer = "container:TDDQiita.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D659DEB423A5A52100BE2FCD"
-               BuildableName = "QiitaFeedTests.xctest"
-               BlueprintName = "QiitaFeedTests"
-               ReferencedContainer = "container:TDDQiita.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -21,20 +21,20 @@ final class QiitaListViewController: UIViewController, StoryboardInstantiatable 
     let noUserImage = UIImage(systemName: "nosign")!
 
     private var dataSource: UITableViewDiffableDataSource<Section, QiitaItem>!
-    private var imageTasks: [IndexPath: QiitaImageLoaderTask] = [:]
+    private var viewModels: [IndexPath: QiitaListImageViewModel] = [:]
 
     private(set) var refreshControl = UIRefreshControl()
 
-    private(set) var listLoader: QiitaLoader!
     private(set) var imageLoader: QiitaImageLoader!
+    private var viewModel: QiitaListViewModel!
 
     private var isLoading: Bool {
         return indicator.isAnimating || refreshControl.isRefreshing
     }
 
-    static func instance(loader: QiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
+    static func instance(listLoader: QiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
         let vc = instantiate()
-        vc.listLoader = loader
+        vc.viewModel = QiitaListViewModel(loader: listLoader)
         vc.imageLoader = imageLoader
         return vc
     }
@@ -69,14 +69,10 @@ final class QiitaListViewController: UIViewController, StoryboardInstantiatable 
                       completion: @escaping ([QiitaItem]?) -> Void) {
         errorView.message = nil
         indicator.startLoading()
-        loadData { items in
-            indicator.stopLoading()
-            completion(items)
-        }
-    }
-
-    private func loadData(completion: @escaping ([QiitaItem]?) -> Void) {
-        listLoader.load { [weak self] result in
+        viewModel.load { [weak self] result in
+            defer {
+                indicator.stopLoading()
+            }
             switch result {
             case .success(let items):
                 completion(items)
@@ -124,7 +120,6 @@ final class QiitaListViewController: UIViewController, StoryboardInstantiatable 
     }
 
     private func renderUserImageIfNeeded(for cell: QiitaListCell, at indexPath: IndexPath, with item: QiitaItem) {
-
         guard let url = item.user?.userImageURL else {
             return
         }
@@ -133,19 +128,17 @@ final class QiitaListViewController: UIViewController, StoryboardInstantiatable 
         loadImage(from: url, at: indexPath) { [weak self, weak cell] data in
             cell?.setUserImage(data: data, defaultImage: self!.noUserImage)
             cell?.stopImageLoading()
-            self?.imageTasks[indexPath] = nil
+            self?.viewModels[indexPath] = nil
         }
     }
 
     private func loadImage(from url: URL, at indexPath: IndexPath,
                            completion: @escaping (Data?) -> Void) {
-        imageTasks[indexPath] = imageLoader.load(url: url) { [weak self] result in
-            guard self?.imageTasks[indexPath] != nil else {
-                completion(nil)
-                return
-            }
+        let viewModel = QiitaListImageViewModel(loader: imageLoader)
+        viewModel.load(from: url) { result in
             completion(try? result.get())
         }
+        viewModels[indexPath] = viewModel
     }
 }
 
@@ -182,7 +175,7 @@ extension QiitaListViewController: UITableViewDataSourcePrefetching {
     }
 
     private func cacncelTask(at indexPath: IndexPath) {
-        imageTasks[indexPath]?.cancel()
-        imageTasks[indexPath] = nil
+        viewModels[indexPath]?.cancel()
+        viewModels[indexPath] = nil
     }
 }

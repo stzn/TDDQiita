@@ -59,6 +59,7 @@ class QiitaListViewControllerTests: XCTestCase {
 
         vc.simulateUserRefreshAction()
         loader.complete(with: .success([anyQiitaItem]), at: 2)
+        XCTAssertEqual(loader.receivedCompletions.count, 3)
 
         vc.simulateLoadMoreAction()
         XCTAssertEqual(vc.isLoadingIndicatorShowing, true)
@@ -294,7 +295,7 @@ class QiitaListViewControllerTests: XCTestCase {
     // MARK: Helpers
     private func makeTestTarget(file: StaticString = #file, line: UInt = #line) -> (QiitaListViewController, QiitaLoaderSpy) {
         let loader = QiitaLoaderSpy()
-        let vc = QiitaListViewController.instance(loader: loader, imageLoader: loader)
+        let vc = QiitaListViewController.instance(listLoader: loader, imageLoader: loader)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(vc, file: file, line: line)
         return (vc, loader)

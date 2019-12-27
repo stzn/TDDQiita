@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class InMemoryQiitaStore {
+final class InMemoryQiitaStore: QiitaStore {
     private(set) var item: CachedQiitaItem? = nil
 
     typealias GetResult = Result<CachedQiitaItem?, Error>
