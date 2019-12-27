@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QiitaFeature
 
 final class InMemoryQiitaImageStore: QiitaImageStore {
     typealias CachedImage = [URL: CachedQiitaImage]

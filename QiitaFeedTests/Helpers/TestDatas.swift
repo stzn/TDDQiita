@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QiitaFeature
 @testable import QiitaFeed
 
 var anyURL: URL {

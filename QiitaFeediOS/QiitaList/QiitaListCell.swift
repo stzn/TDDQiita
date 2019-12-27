@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QiitaFeed
+import QiitaFeature
 
 class QiitaListCell: UITableViewCell {
     @IBOutlet private(set) weak var titleLabel: UILabel!

@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import QiitaFeature
 @testable import QiitaFeed
 
 class RemoteQiitaLoaderTests: XCTestCase {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol QiitaStore {
+public protocol QiitaStore {
     typealias GetResult = Result<CachedQiitaItem?, Error>
     typealias GetCompletion = (GetResult) -> Void
     func get(completion: @escaping GetCompletion)

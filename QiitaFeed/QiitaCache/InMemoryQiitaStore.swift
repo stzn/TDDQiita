@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QiitaFeature
 
 final class InMemoryQiitaStore: QiitaStore {
     private(set) var item: CachedQiitaItem? = nil

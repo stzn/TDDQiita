@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import QiitaFeed
+import QiitaFeature
 @testable import QiitaFeediOS
 
 extension QiitaListViewControllerTests {

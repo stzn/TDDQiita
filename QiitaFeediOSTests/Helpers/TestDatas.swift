@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QiitaFeed
+import QiitaFeature
 
 var anyURL: URL {
     URL(string: "https://anyURL\(UUID().uuidString).com")!

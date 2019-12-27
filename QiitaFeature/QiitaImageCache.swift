@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol QiitaImageCache {
+public protocol QiitaImageCache {
     typealias SaveResult = Result<Void, Error>
     typealias SaveCompletion = (SaveResult) -> Void
     typealias DeleteResult = Result<Void, Error>

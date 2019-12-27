@@ -6,6 +6,8 @@
 //  Copyright © 2019 shiz. All rights reserved.
 //
 
+import QiitaFeature
+
 final class RemoteQiitaLoader: QiitaLoader {
     private struct Pagination {
         let nextURL: URL

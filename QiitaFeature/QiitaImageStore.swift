@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol QiitaImageStore {
+public protocol QiitaImageStore {
     typealias GetResult = Result<CachedQiitaImage?, Error>
     typealias GetCompletion = (GetResult) -> Void
     func get(for url: URL, completion: @escaping GetCompletion)

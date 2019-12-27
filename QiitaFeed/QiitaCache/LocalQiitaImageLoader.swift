@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QiitaFeature
 
 final class LocalQiitaImageLoader {
     let store: QiitaImageStore

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QiitaFeed
+import QiitaFeature
 
 final class QiitaListViewModel {
     private let loader: QiitaLoader

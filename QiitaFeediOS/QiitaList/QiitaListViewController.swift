@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QiitaFeed
+import QiitaFeature
 
 final class QiitaListViewController: UIViewController, StoryboardInstantiatable {
     @IBOutlet private(set) weak var tableView: UITableView!

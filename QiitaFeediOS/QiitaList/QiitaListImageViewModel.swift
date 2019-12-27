@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QiitaFeed
+import QiitaFeature
 
 final class QiitaListImageViewModel {
     private var task: QiitaImageLoaderTask?

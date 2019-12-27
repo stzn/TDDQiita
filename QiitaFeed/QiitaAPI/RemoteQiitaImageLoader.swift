@@ -6,6 +6,8 @@
 //  Copyright © 2019 shiz. All rights reserved.
 //
 
+import QiitaFeature
+
 final class RemoteQiitaImageLoader: QiitaImageLoader {
     let client: HTTPClient
     init(client: HTTPClient) {
