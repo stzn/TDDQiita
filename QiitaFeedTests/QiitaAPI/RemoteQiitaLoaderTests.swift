@@ -29,6 +29,20 @@ class RemoteQiitaLoaderTests: XCTestCase {
                     responseResult: .success((anyData, anyHTTPURLResponse)))
     }
 
+    func testQueryParameter() {
+        let (loader, client) = makeTestTarget()
+        loader.load { _ in }
+
+        guard let url = client.receivedValues.first?.url else {
+            XCTFail("url must not be nil")
+            return
+        }
+        assertQueryParameters(url: url, parameters: [
+            RemoteQiitaLoader.QueryKey.pageNumber: 1,
+            RemoteQiitaLoader.QueryKey.perPageCount: loader.perPageCount
+        ])
+    }
+
     // MARK: Helpers
     typealias Assert = (RemoteQiitaLoader.Result, RemoteQiitaLoader.Result) -> Bool
 
@@ -75,6 +89,27 @@ class RemoteQiitaLoaderTests: XCTestCase {
             let target = RemoteQiitaLoader(url: anyURL, client: client)
             trackForMemoryLeaks(target, file: file, line: line)
             return (target, client)
+    }
+
+    private func assertQueryParameters(
+        url: URL, parameters: [String: Any],
+        file: StaticString = #file, line: UInt = #line) {
+
+        for (key, value) in parameters {
+            assertQueryParameter(url: url.absoluteString, key: key, value: value, file: file, line: line)
+        }
+    }
+
+    private func assertQueryParameter(
+        url: String, key: String, value: Any,
+        file: StaticString = #file, line: UInt = #line) {
+        guard let url = URLComponents(string: url) else {
+            XCTFail("invalid url", file: file, line: line)
+            return
+        }
+        let paramValue = url.queryItems?.first(where: { $0.name == key })?.value
+        XCTAssertEqual(String(describing: paramValue!),
+                       String(describing: value), file: file, line: line)
     }
 }
 
