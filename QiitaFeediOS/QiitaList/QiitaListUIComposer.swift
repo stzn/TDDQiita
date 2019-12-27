@@ -12,27 +12,26 @@ import QiitaFeature
 
 struct QiitaListUIComposer {
     static func composeQiitaListViewController(listLoader: QiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
-        let vc = QiitaListViewController.instantiate()
+        let viewController = QiitaListViewController.instantiate()
 
         let viewModel = QiitaListViewModel(loader: listLoader)
-        viewModel.onLoad = adaptQiitaItemToQiitaListViewController(to: vc, imageLoader: imageLoader)
-        viewModel.onError = { [weak vc] error in
-            vc?.setError(error)
+        viewModel.onLoad = adaptQiitaItemsTo(viewController, imageLoader: imageLoader)
+        viewModel.onError = { [weak viewController] error in
+            viewController?.setError(error)
         }
-        viewModel.onLoadStateChange = { [weak vc] in
-            vc?.configureIndicator()
+        viewModel.onLoadStateChange = { [weak viewController] in
+            viewController?.configureIndicator()
         }
-        viewModel.onRefreshStateChange = { [weak vc] in
-            vc?.configureRefreshControl()
+        viewModel.onRefreshStateChange = { [weak viewController] in
+            viewController?.configureRefreshControl()
         }
-        vc.viewModel = viewModel
+        viewController.viewModel = viewModel
 
-        return vc
+        return viewController
     }
 
-    private static func adaptQiitaItemToQiitaListViewController(
-        to viewController: QiitaListViewController,
-        imageLoader: QiitaImageLoader) -> ([QiitaItem]) -> Void {
+    private static func adaptQiitaItemsTo(_ viewController: QiitaListViewController,
+                                         imageLoader: QiitaImageLoader) -> ([QiitaItem]) -> Void {
         return { [weak viewController] items in
             let cellControllers: [QiitaListCellController] = items.map { item in
                 let viewModel = QiitaListImageViewModel(loader: imageLoader)

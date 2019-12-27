@@ -11,10 +11,10 @@ import QiitaFeature
 final class QiitaListViewModel {
     var onLoadStateChange: (() -> Void)?
     var onRefreshStateChange: (() -> Void)?
-
-    private let loader: QiitaLoader
     var onLoad: (([QiitaItem]) -> Void)!
     var onError: ((Error) -> Void)!
+    
+    private let loader: QiitaLoader
     init(loader: QiitaLoader) {
         self.loader = loader
     }
