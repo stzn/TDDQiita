@@ -36,7 +36,11 @@ final class RemoteQiitaLoader: QiitaLoader {
             assertionFailure("can not construct url from \(self.url)")
             return
         }
-        client.get(from: urlWithQuery) { [weak self] result in
+        get(from: urlWithQuery, completion: completion)
+    }
+
+    private func get(from url: URL, completion: @escaping (QiitaLoader.Result) -> Void) {
+        client.get(from: url) { [weak self] result in
             switch result {
             case .success(let data, let response):
                 do {
@@ -64,7 +68,7 @@ final class RemoteQiitaLoader: QiitaLoader {
         if let pagination = pagination {
             return pagination.nextURL
         }
-        
+
         guard var component = URLComponents(string: url.absoluteString) else {
             return url
         }
