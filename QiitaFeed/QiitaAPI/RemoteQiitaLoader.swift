@@ -12,7 +12,6 @@ final class RemoteQiitaLoader: QiitaLoader {
     }
 
     enum QueryKey {
-        static let query = "query"
         static let pageNumber = "page"
         static let perPageCount = "per_page"
     }
@@ -37,11 +36,12 @@ final class RemoteQiitaLoader: QiitaLoader {
             assertionFailure("can not construct url from \(self.url)")
             return
         }
-        client.get(from: urlWithQuery) { result in
+        client.get(from: urlWithQuery) { [weak self] result in
             switch result {
             case .success(let data, let response):
                 do {
                     let items = try JSONDecoder().decode([QiitaItem].self, from: data)
+                    self?.setPagination(from: response)
                     completion(.success(items))
                 } catch {
                     completion(.failure(Error.invalidData))
@@ -52,11 +52,19 @@ final class RemoteQiitaLoader: QiitaLoader {
         }
     }
 
+    private func setPagination(from response: HTTPURLResponse) {
+        guard let link = response.findLink(relation: "next"),
+            let nextURL = URL(string: link.uri) else {
+                return
+        }
+        pagination = Pagination(nextURL: nextURL)
+    }
+
     private func constructURL(url: URL) -> URL? {
         if let pagination = pagination {
             return pagination.nextURL
         }
-
+        
         guard var component = URLComponents(string: url.absoluteString) else {
             return url
         }
