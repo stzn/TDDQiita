@@ -88,7 +88,14 @@
 			remoteGlobalIDString = 74DE15DB23B5B81500774A9F;
 			remoteInfo = QiitaFeature;
 		};
-		74DE15F623B5BA1000774A9F /* PBXContainerItemProxy */ = {
+		74DE160923B5BCF700774A9F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D6B360D823A4738900B54365 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74DE15DB23B5B81500774A9F;
+			remoteInfo = QiitaFeature;
+		};
+		74DE160B23B5BCFD00774A9F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D6B360D823A4738900B54365 /* Project object */;
 			proxyType = 1;
@@ -577,7 +584,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				74DE15F723B5BA1000774A9F /* PBXTargetDependency */,
+				74DE160A23B5BCF700774A9F /* PBXTargetDependency */,
 			);
 			name = QiitaFeed;
 			productName = QiitaFeed;
@@ -614,6 +621,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				74DE160C23B5BCFD00774A9F /* PBXTargetDependency */,
 			);
 			name = QiitaFeediOS;
 			productName = QiitaFeediOS;
@@ -868,10 +876,15 @@
 			target = 74DE15DB23B5B81500774A9F /* QiitaFeature */;
 			targetProxy = 74DE15E123B5B81500774A9F /* PBXContainerItemProxy */;
 		};
-		74DE15F723B5BA1000774A9F /* PBXTargetDependency */ = {
+		74DE160A23B5BCF700774A9F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 74DE15DB23B5B81500774A9F /* QiitaFeature */;
-			targetProxy = 74DE15F623B5BA1000774A9F /* PBXContainerItemProxy */;
+			targetProxy = 74DE160923B5BCF700774A9F /* PBXContainerItemProxy */;
+		};
+		74DE160C23B5BCFD00774A9F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 74DE15DB23B5B81500774A9F /* QiitaFeature */;
+			targetProxy = 74DE160B23B5BCFD00774A9F /* PBXContainerItemProxy */;
 		};
 		D659DEB823A5A52100BE2FCD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
