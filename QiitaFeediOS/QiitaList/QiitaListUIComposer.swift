@@ -34,9 +34,9 @@ struct QiitaListUIComposer {
                                          imageLoader: QiitaImageLoader) -> ([QiitaItem]) -> Void {
         return { [weak viewController] items in
             let cellControllers: [QiitaListCellController] = items.map { item in
-                let viewModel = QiitaListImageViewModel(loader: imageLoader)
-                let displayItem = convertItemForDisplay(item)
-                return QiitaListCellController(viewModel: viewModel, item: displayItem)
+                QiitaListCellController(
+                    viewModel: QiitaListImageViewModel(loader: imageLoader),
+                    item: convertItemForDisplay(item))
             }
             viewController?.cellControllers.append(contentsOf: cellControllers)
             viewController?.updateTableView()
