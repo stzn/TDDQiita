@@ -31,13 +31,19 @@ final class QiitaListCellController {
     private func renderUserImage(
         for cell: QiitaListCell, at indexPath: IndexPath, from url: URL) {
         cell.startImageLoading()
-        viewModel.load(from: url) { [weak cell] result in
-            if let data = try? result.get(), let image = UIImage(data: data) {
-                cell?.setUserImage(image: image)
-            } else {
-                cell?.setUserImage(image: noUserImage)
-            }
+        loadImage(from: url) { [weak cell] image in
+            cell?.setUserImage(image: image)
             cell?.stopImageLoading()
+        }
+    }
+
+    private func loadImage(from url: URL, completion: @escaping (UIImage) -> Void) {
+        viewModel.load(from: url) { result in
+            if let data = try? result.get(), let image = UIImage(data: data) {
+                completion(image)
+            } else {
+                completion(noUserImage)
+            }
         }
     }
 

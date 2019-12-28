@@ -25,7 +25,7 @@ public final class RemoteQiitaLoader: QiitaLoader {
 
     private var pagination: Pagination?
     
-    let perPageCount = 30
+    let perPageCount = 10
     let url: URL
     let client: HTTPClient
     public init(url: URL, client: HTTPClient) {
