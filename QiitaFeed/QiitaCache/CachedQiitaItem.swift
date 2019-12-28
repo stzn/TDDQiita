@@ -9,7 +9,7 @@
 import Foundation
 import QiitaFeature
 
-struct CachedQiitaItem: Equatable {
+public struct CachedQiitaItem: Equatable {
     public let items: [QiitaItem]
     public let timestamp: Date
 

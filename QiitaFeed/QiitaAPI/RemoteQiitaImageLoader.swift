@@ -8,9 +8,9 @@
 
 import QiitaFeature
 
-final class RemoteQiitaImageLoader: QiitaImageLoader {
+public final class RemoteQiitaImageLoader: QiitaImageLoader {
     let client: HTTPClient
-    init(client: HTTPClient) {
+    public init(client: HTTPClient) {
         self.client = client
     }
 
@@ -33,7 +33,7 @@ final class RemoteQiitaImageLoader: QiitaImageLoader {
     }
 
     @discardableResult
-    func load(url: URL, completion: @escaping Completion) -> QiitaImageLoaderTask {
+    public func load(url: URL, completion: @escaping Completion) -> QiitaImageLoaderTask {
         let task = RemoteQiitaImageLoaderTask(completion)
         task.task = client.get(from: url) { result in
             switch result {

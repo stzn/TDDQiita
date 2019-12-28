@@ -9,25 +9,27 @@
 import Foundation
 import QiitaFeature
 
-final class InMemoryQiitaStore: QiitaStore {
+public final class InMemoryQiitaStore: QiitaStore {
+    public init() {}
+
     private(set) var item: CachedQiitaItem? = nil
 
-    typealias GetResult = Result<CachedQiitaItem?, Error>
-    typealias GetCompletion = (GetResult) -> Void
-    func get(completion: @escaping GetCompletion) {
+    public typealias GetResult = Result<CachedQiitaItem?, Error>
+    public typealias GetCompletion = (GetResult) -> Void
+    public func get(completion: @escaping GetCompletion) {
         completion(.success(item))
     }
 
-    typealias SaveResult = Result<Void, Error>
-    typealias SaveCompletion = (SaveResult) -> Void
-    func save(_ item: CachedQiitaItem, completion: @escaping SaveCompletion) {
+    public typealias SaveResult = Result<Void, Error>
+    public typealias SaveCompletion = (SaveResult) -> Void
+    public func save(_ item: CachedQiitaItem, completion: @escaping SaveCompletion) {
         self.item = item
         completion(.success(()))
     }
 
-    typealias DeleteResult = Result<Void, Error>
-    typealias DeleteCompletion = (DeleteResult) -> Void
-    func delete(completion: @escaping DeleteCompletion) {
+    public typealias DeleteResult = Result<Void, Error>
+    public typealias DeleteCompletion = (DeleteResult) -> Void
+    public func delete(completion: @escaping DeleteCompletion) {
         self.item = nil
         completion(.success(()))
     }

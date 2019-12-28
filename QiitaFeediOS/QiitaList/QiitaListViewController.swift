@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class QiitaListViewController: UIViewController, StoryboardInstantiatable {
+public final class QiitaListViewController: UIViewController, StoryboardInstantiatable {
     @IBOutlet private(set) weak var tableView: UITableView!
     @IBOutlet private(set) weak var indicator: UIActivityIndicatorView!
     @IBOutlet private(set) weak var errorView: ErrorView!
@@ -29,7 +29,7 @@ final class QiitaListViewController: UIViewController, StoryboardInstantiatable 
         return indicator.isAnimating || refreshControl.isRefreshing
     }
 
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         setRefreshControl()
         setupTableView()
@@ -107,12 +107,12 @@ final class QiitaListViewController: UIViewController, StoryboardInstantiatable 
 }
 
 extension QiitaListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cellControllers[indexPath.row].cancel()
         cacncel(at: indexPath)
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let lastIndexPath = tableView.indexPathsForVisibleRows?.last, !isLoading else {
             return
         }
@@ -123,13 +123,13 @@ extension QiitaListViewController: UITableViewDelegate {
 }
 
 extension QiitaListViewController: UITableViewDataSourcePrefetching {
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+    public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
             cellControllers[indexPath.row].preload()
         }
     }
 
-    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+    public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach(cacncel(at:))
     }
 

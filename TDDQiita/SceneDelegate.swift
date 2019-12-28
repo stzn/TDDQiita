@@ -7,17 +7,48 @@
 //
 
 import UIKit
+import QiitaFeature
+import QiitaFeed
+import QiitaFeediOS
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
+    private lazy var httpClient: HTTPClient = {
+        URLSessionHTTPClient()
+    }()
+
+    private lazy var store: QiitaStore = {
+        InMemoryQiitaStore()
+    }()
+
+    private lazy var imageStore: QiitaImageStore = {
+        InMemoryQiitaImageStore()
+    }()
+
+    private lazy var remoteQiitaLoader: RemoteQiitaLoader = {
+        RemoteQiitaLoader(url: URL(string: "https://qiita.com/api/v2/items")!,
+                          client: httpClient)
+    }()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+
+        configureWindow()
+    }
+
+    func configureWindow() {
+        let qiitaURL = URL(string: "https://qiita.com/api/v2/items")!
+        let remoteQiitaLoader = RemoteQiitaLoader(url: qiitaURL, client: httpClient)
+        let remoteQiitaImageLoader = RemoteQiitaImageLoader(client: httpClient)
+//        let localQiitaLoader = LocalQiitaLoader(store: store, currentDate: Date.init)
+//        let localQiitaImageLoader = LocalQiitaImageLoader(store: imageStore, currentDate: Date.init)
+
+        window?.rootViewController = QiitaListUIComposer.composeQiitaListViewController(listLoader: remoteQiitaLoader, imageLoader: remoteQiitaImageLoader)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

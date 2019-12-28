@@ -9,10 +9,10 @@
 import Foundation
 import QiitaFeature
 
-final class LocalQiitaImageLoader {
+public final class LocalQiitaImageLoader {
     let store: QiitaImageStore
     let currentDate: () -> Date
-    init(store: QiitaImageStore,
+    public init(store: QiitaImageStore,
          currentDate: @escaping () -> Date = Date.init) {
         self.store = store
         self.currentDate = currentDate
@@ -36,7 +36,7 @@ extension LocalQiitaImageLoader: QiitaImageLoader {
     }
 
     @discardableResult
-    func load(url: URL, completion: @escaping Completion) -> QiitaImageLoaderTask {
+    public func load(url: URL, completion: @escaping Completion) -> QiitaImageLoaderTask {
         let task = LocalQiitaImageLoaderTask(completion)
         store.get(for: url) { result in
             switch result {
@@ -53,13 +53,13 @@ extension LocalQiitaImageLoader: QiitaImageLoader {
 }
 
 extension LocalQiitaImageLoader: QiitaImageCache {
-    func save(for url: URL, data: Data, completion: @escaping SaveCompletion) {
-        store.save(url: url,
+    public func save(for url: URL, data: Data, completion: @escaping SaveCompletion) {
+        store.save(for: url,
                    image: CachedQiitaImage(data: data, timestamp: Date()),
                    completion: completion)
     }
 
-    func delete(for url: URL, completion: @escaping DeleteCompletion) {
-        store.delete(url: url, completion: completion)
+    public func delete(for url: URL, completion: @escaping DeleteCompletion) {
+        store.delete(for: url, completion: completion)
     }
 }

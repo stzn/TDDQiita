@@ -13,7 +13,14 @@ import QiitaFeature
 class RemoteQiitaLoaderTests: XCTestCase {
     func testFetchItemsFetched() {
         let item = anyQiitaItem
-        expect([item], responseResult: .success((encode([item]), anyHTTPURLResponse)))
+        var user: CodableQiitaItem.User? = nil
+        if let itemUser = item.user {
+            user = CodableQiitaItem.User(
+                githubLoginName: itemUser.githubLoginName, profileImageUrl: itemUser.profileImageUrl)
+        }
+        let codableItem = CodableQiitaItem(
+            id: item.id, likesCount: item.likesCount, reactionsCount: item.reactionsCount, commentsCount: item.commentsCount, title: item.title, createdAt: item.createdAt.string(format: .ISO8601Format), updatedAt: item.updatedAt.string(format: .ISO8601Format), url: item.url, tags: item.tags.map { tag in CodableQiitaItem.Tag(name: tag.name) }, user: user)
+        expect([item], responseResult: .success((encode([codableItem]), anyHTTPURLResponse)))
     }
 
     func testFetchEmptyNoItemFetched() {
@@ -59,7 +66,7 @@ class RemoteQiitaLoaderTests: XCTestCase {
             case .success(let items):
                 XCTAssertEqual(items, expected, file: file, line: line)
             case .failure:
-                XCTFail("\(expected) want but got \(received)")
+                XCTFail("\(expected) want but got \(received)", file: file, line: line)
             }
         }
         client.completeWith(result: responseResult)
@@ -112,9 +119,35 @@ class RemoteQiitaLoaderTests: XCTestCase {
         XCTAssertEqual(String(describing: paramValue!),
                        String(describing: value), file: file, line: line)
     }
+
+    private var anyCodableQiitaItem: CodableQiitaItem {
+        CodableQiitaItem(
+            id: UUID().uuidString,
+            likesCount: 1, reactionsCount: 1, commentsCount: 1, title: "title",
+            createdAt: Date().string(format: .ISO8601Format),
+            updatedAt: Date().string(format: .ISO8601Format), url: anyURL,
+            tags: [CodableQiitaItem.Tag(name: "tag")], user: nil)
+    }
+
+    private func encode(_ items: [CodableQiitaItem]) -> Data {
+        try! JSONEncoder().encode(items)
+    }
 }
 
-private func encode(_ items: [QiitaItem]) -> Data {
-    try! JSONEncoder().encode(items)
+extension QiitaItem: Equatable {
+    static func ==(lhs: QiitaItem, rhs: QiitaItem) -> Bool {
+        return lhs.id == rhs.id
+            && lhs.likesCount == rhs.likesCount
+            && lhs.reactionsCount == rhs.reactionsCount
+            && lhs.commentsCount == rhs.commentsCount
+            && lhs.title == rhs.title
+            && String(describing: lhs.createdAt) == String(describing: rhs.createdAt)
+            && String(describing: lhs.updatedAt) == String(describing: rhs.updatedAt)
+            && lhs.url == rhs.url
+            && lhs.tags == rhs.tags
+            && lhs.user == rhs.user
+    }
 }
+extension QiitaItem.Tag: Equatable{}
+extension QiitaItem.User: Equatable {}
 

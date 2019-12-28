@@ -9,10 +9,10 @@
 import Foundation
 import QiitaFeature
 
-final class LocalQiitaLoader {
+public final class LocalQiitaLoader {
     let store: QiitaStore
     let currentDate: () -> Date
-    init(store: QiitaStore,
+    public init(store: QiitaStore,
          currentDate: @escaping () -> Date = Date.init) {
         self.store = store
         self.currentDate = currentDate
@@ -44,7 +44,7 @@ extension LocalQiitaLoader: QiitaCache {
 }
 
 extension LocalQiitaLoader: QiitaLoader {
-    func load(completion: @escaping Completion) {
+    public func load(completion: @escaping Completion) {
         store.get { [weak self] result in
             guard let self = self else {
                 return

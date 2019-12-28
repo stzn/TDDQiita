@@ -15,9 +15,9 @@ public protocol QiitaImageStore {
 
     typealias SaveResult = Result<Void, Error>
     typealias SaveCompletion = (SaveResult) -> Void
-    func save(url: URL, image: CachedQiitaImage, completion: @escaping SaveCompletion)
+    func save(for url: URL, image: CachedQiitaImage, completion: @escaping SaveCompletion)
 
     typealias DeleteResult = Result<Void, Error>
     typealias DeleteCompletion = (DeleteResult) -> Void
-    func delete(url: URL, completion: @escaping DeleteCompletion)
+    func delete(for url: URL, completion: @escaping DeleteCompletion)
 }

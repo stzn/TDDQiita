@@ -32,7 +32,7 @@ final class QiitaImageStoreSpy: QiitaImageStore {
         receivedGetCompletions[url]!(result)
     }
 
-    func save(url: URL, image: CachedQiitaImage, completion: @escaping SaveCompletion) {
+    func save(for url: URL, image: CachedQiitaImage, completion: @escaping SaveCompletion) {
         receivedMessages.append(.save(url))
         receivedSaveCompletions[url] = completion
     }
@@ -41,7 +41,7 @@ final class QiitaImageStoreSpy: QiitaImageStore {
         receivedSaveCompletions[url]!(result)
     }
 
-    func delete(url: URL, completion: @escaping DeleteCompletion) {
+    func delete(for url: URL, completion: @escaping DeleteCompletion) {
         receivedDeleteCompletions[url] = completion
         receivedMessages.append(.delete(url))
     }

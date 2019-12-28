@@ -8,7 +8,7 @@
 
 import QiitaFeature
 
-final class RemoteQiitaLoader: QiitaLoader {
+public final class RemoteQiitaLoader: QiitaLoader {
     private struct Pagination {
         let nextURL: URL
     }
@@ -28,12 +28,12 @@ final class RemoteQiitaLoader: QiitaLoader {
     let perPageCount = 30
     let url: URL
     let client: HTTPClient
-    init(url: URL, client: HTTPClient) {
+    public init(url: URL, client: HTTPClient) {
         self.url = url
         self.client = client
     }
 
-    func load(completion: @escaping (QiitaLoader.Result) -> Void) {
+    public func load(completion: @escaping (QiitaLoader.Result) -> Void) {
         guard let urlWithQuery = constructURL(url: url) else {
             assertionFailure("can not construct url from \(self.url)")
             return
@@ -43,12 +43,17 @@ final class RemoteQiitaLoader: QiitaLoader {
 
     private func get(from url: URL, completion: @escaping (QiitaLoader.Result) -> Void) {
         client.get(from: url) { [weak self] result in
+            guard let self = self else {
+                return
+            }
             switch result {
             case .success(let data, let response):
                 do {
-                    let items = try JSONDecoder().decode([QiitaItem].self, from: data)
-                    self?.setPagination(from: response)
-                    completion(.success(items))
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    let items = try decoder.decode([CodableQiitaItem].self, from: data)
+                    self.setPagination(from: response)
+                    completion(.success(self.convertToQiitaItems(from: items)))
                 } catch {
                     completion(.failure(Error.invalidData))
                 }
@@ -90,5 +95,26 @@ final class RemoteQiitaLoader: QiitaLoader {
             items.append(URLQueryItem(name: key, value: value))
         }
         return items
+    }
+
+    private func convertToQiitaItems(from codableItems: [CodableQiitaItem]) -> [QiitaItem] {
+        codableItems.map { codable in
+            var user: QiitaItem.User?
+            if let codableUser = codable.user {
+                user = QiitaItem.User(
+                    githubLoginName: codableUser.githubLoginName,
+                    profileImageUrl: codableUser.profileImageUrl)
+            }
+            return QiitaItem(id: codable.id,
+                             likesCount: codable.likesCount,
+                             reactionsCount: codable.reactionsCount,
+                             commentsCount: codable.commentsCount,
+                             title: codable.title,
+                             createdAt: Date(fromISO8601: codable.createdAt)!,
+                             updatedAt: Date(fromISO8601: codable.updatedAt)!,
+                             url: codable.url,
+                             tags: codable.tags.map { codable in QiitaItem.Tag(name: codable.name) },
+                             user: user)
+        }
     }
 }

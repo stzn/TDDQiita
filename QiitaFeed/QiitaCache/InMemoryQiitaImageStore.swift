@@ -9,22 +9,24 @@
 import Foundation
 import QiitaFeature
 
-final class InMemoryQiitaImageStore: QiitaImageStore {
+public final class InMemoryQiitaImageStore: QiitaImageStore {
     typealias CachedImage = [URL: CachedQiitaImage]
+
+    public init() {}
 
     var cachedImage: CachedImage = [:]
 
-    func get(for url: URL, completion: @escaping GetCompletion) {
+    public func get(for url: URL, completion: @escaping GetCompletion) {
         let cached = cachedImage[url]
         completion(.success(cached))
     }
 
-    func save(url: URL, image: CachedQiitaImage, completion: @escaping SaveCompletion) {
+    public func save(for url: URL, image: CachedQiitaImage, completion: @escaping SaveCompletion) {
         cachedImage[url] = image
         completion(.success(()))
     }
 
-    func delete(url: URL, completion: @escaping DeleteCompletion) {
+    public func delete(for url: URL, completion: @escaping DeleteCompletion) {
         cachedImage[url] = nil
         completion(.success(()))
     }

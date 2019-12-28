@@ -34,6 +34,6 @@ extension QiitaListViewControllerTests {
         XCTAssertEqual(cell.userName, item.user?.githubLoginName, file: file, line: line)
         XCTAssertEqual(cell.likeCount, String(item.likesCount), file: file, line: line)
         XCTAssertEqual(cell.commentCount, String(item.commentsCount), file: file, line: line)
-        XCTAssertEqual(cell.updatedAt, item.updatedAt.description, file: file, line: line)
+        XCTAssertEqual(cell.updatedAt, item.updatedAt.string(format: .japaneseFormat), file: file, line: line)
     }
 }

@@ -10,12 +10,12 @@ import Foundation
 import UIKit
 import QiitaFeature
 
-struct QiitaListUIComposer {
-    static func composeQiitaListViewController(listLoader: QiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
+public struct QiitaListUIComposer {
+    public static func composeQiitaListViewController(listLoader: QiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
         let viewController = QiitaListViewController.instantiate()
 
-        let viewModel = QiitaListViewModel(loader: listLoader)
-        viewModel.onLoad = adaptQiitaItemsTo(viewController, imageLoader: imageLoader)
+        let viewModel = QiitaListViewModel(loader: MainQueueDispatchDecorator(decoratee: listLoader))
+        viewModel.onLoad = adaptQiitaItemsTo(viewController, imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader))
         viewModel.onError = { [weak viewController] error in
             viewController?.setError(error)
         }
@@ -49,7 +49,7 @@ struct QiitaListUIComposer {
             userName: item.user?.githubLoginName ?? "",
             likesCount: String(describing: item.likesCount),
             commentsCount: String(describing: item.commentsCount),
-            updatedAt: item.updatedAt.description,
+            updatedAt: item.updatedAt.string(format: .japaneseFormat),
             userImageURL: item.user?.userImageURL)
     }
 }
