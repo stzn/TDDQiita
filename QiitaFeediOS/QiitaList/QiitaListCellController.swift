@@ -32,8 +32,11 @@ final class QiitaListCellController {
         for cell: QiitaListCell, at indexPath: IndexPath, from url: URL) {
         cell.startImageLoading()
         viewModel.load(from: url) { [weak cell] result in
-            cell?.setUserImage(data: try? result.get(),
-                               defaultImage: noUserImage)
+            if let data = try? result.get(), let image = UIImage(data: data) {
+                cell?.setUserImage(image: image)
+            } else {
+                cell?.setUserImage(image: noUserImage)
+            }
             cell?.stopImageLoading()
         }
     }

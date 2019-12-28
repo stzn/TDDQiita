@@ -48,11 +48,7 @@ final class QiitaListCell: UITableViewCell {
         indicator.stopAnimating()
     }
 
-    func setUserImage(data: Data?, defaultImage: UIImage) {
-        if let data = data, let image = UIImage(data: data) {
-            userImageView.image = image
-        } else {
-            userImageView.image = defaultImage
-        }
+    func setUserImage(image: UIImage) {
+        userImageView.image = image
     }
 }
