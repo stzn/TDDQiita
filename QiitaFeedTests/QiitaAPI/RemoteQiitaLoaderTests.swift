@@ -13,13 +13,7 @@ import QiitaFeature
 class RemoteQiitaLoaderTests: XCTestCase {
     func testFetchItemsFetched() {
         let item = anyQiitaItem
-        var user: CodableQiitaItem.User? = nil
-        if let itemUser = item.user {
-            user = CodableQiitaItem.User(
-                githubLoginName: itemUser.githubLoginName, profileImageUrl: itemUser.profileImageUrl)
-        }
-        let codableItem = CodableQiitaItem(
-            id: item.id, likesCount: item.likesCount, reactionsCount: item.reactionsCount, commentsCount: item.commentsCount, title: item.title, createdAt: item.createdAt.string(format: .ISO8601Format), updatedAt: item.updatedAt.string(format: .ISO8601Format), url: item.url, tags: item.tags.map { tag in CodableQiitaItem.Tag(name: tag.name) }, user: user)
+        let codableItem = converToCodableItem(from: item)
         expect([item], responseResult: .success((encode([codableItem]), anyHTTPURLResponse)))
     }
 
@@ -74,8 +68,8 @@ class RemoteQiitaLoaderTests: XCTestCase {
     }
 
     private func expectError(_ expected: RemoteQiitaLoader.Error,
-                        responseResult: HTTPClient.Result,
-                        file: StaticString = #file, line: UInt = #line) {
+                             responseResult: HTTPClient.Result,
+                             file: StaticString = #file, line: UInt = #line) {
         let (loader, client) = makeTestTarget(file: file, line: line)
         let exp = expectation(description: "expect error")
         loader.load { received in
@@ -120,16 +114,26 @@ class RemoteQiitaLoaderTests: XCTestCase {
                        String(describing: value), file: file, line: line)
     }
 
-    private var anyCodableQiitaItem: CodableQiitaItem {
-        CodableQiitaItem(
-            id: UUID().uuidString,
-            likesCount: 1, reactionsCount: 1, commentsCount: 1, title: "title",
-            createdAt: Date().string(format: .ISO8601Format),
-            updatedAt: Date().string(format: .ISO8601Format), url: anyURL,
-            tags: [CodableQiitaItem.Tag(name: "tag")], user: nil)
-    }
-
     private func encode(_ items: [CodableQiitaItem]) -> Data {
         try! JSONEncoder().encode(items)
+    }
+
+    private func converToCodableItem(from item: QiitaItem) -> CodableQiitaItem {
+        var user: CodableQiitaItem.User? = nil
+        if let itemUser = item.user {
+            user = CodableQiitaItem.User(
+                githubLoginName: itemUser.githubLoginName, profileImageUrl: itemUser.profileImageUrl)
+        }
+        return CodableQiitaItem(
+            id: item.id,
+            likesCount: item.likesCount,
+            reactionsCount: item.reactionsCount,
+            commentsCount: item.commentsCount,
+            title: item.title,
+            createdAt: item.createdAt.string(format: .ISO8601Format),
+            updatedAt: item.updatedAt.string(format: .ISO8601Format),
+            url: item.url,
+            tags: item.tags.map { tag in CodableQiitaItem.Tag(name: tag.name) },
+            user: user)
     }
 }
