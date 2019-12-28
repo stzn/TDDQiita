@@ -133,21 +133,3 @@ class RemoteQiitaLoaderTests: XCTestCase {
         try! JSONEncoder().encode(items)
     }
 }
-
-extension QiitaItem: Equatable {
-    static func ==(lhs: QiitaItem, rhs: QiitaItem) -> Bool {
-        return lhs.id == rhs.id
-            && lhs.likesCount == rhs.likesCount
-            && lhs.reactionsCount == rhs.reactionsCount
-            && lhs.commentsCount == rhs.commentsCount
-            && lhs.title == rhs.title
-            && String(describing: lhs.createdAt) == String(describing: rhs.createdAt)
-            && String(describing: lhs.updatedAt) == String(describing: rhs.updatedAt)
-            && lhs.url == rhs.url
-            && lhs.tags == rhs.tags
-            && lhs.user == rhs.user
-    }
-}
-extension QiitaItem.Tag: Equatable{}
-extension QiitaItem.User: Equatable {}
-
