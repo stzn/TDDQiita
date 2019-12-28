@@ -11,40 +11,44 @@ import UIKit
 let noUserImage = UIImage(systemName: "nosign")!
 
 final class QiitaListCellController {
-    private let viewModel: QiitaListImageViewModel<UIImage>
-    let item: DisplayQiitaItem
+    var item: DisplayQiitaItem { viewModel.item }
 
-    init(viewModel: QiitaListImageViewModel<UIImage>, item: DisplayQiitaItem) {
+    private let viewModel: QiitaListImageViewModel<UIImage>
+    init(viewModel: QiitaListImageViewModel<UIImage>) {
         self.viewModel = viewModel
-        self.item = item
     }
 
-    func cell(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
+    private func binded(tableView: UITableView,
+                        at indexPath: IndexPath) -> QiitaListCell {
         let cell: QiitaListCell = tableView.dequeueReusableCell()
-        cell.configure(item)
-        if let url = item.userImageURL {
-            renderUserImage(for: cell, at: indexPath, from: url)
+
+        viewModel.onLoad = { [weak cell] image in
+            cell?.setUserImage(from: image)
         }
+        viewModel.onLoadingStateChange = { [weak cell] in
+            guard let cell = cell else {
+                return
+            }
+            cell.isLoading
+                ? cell.stopImageLoading()
+                : cell.startImageLoading()
+        }
+
+        cell.configure(viewModel.item)
+        loadImage()
         return cell
     }
 
-    private func renderUserImage(
-        for cell: QiitaListCell, at indexPath: IndexPath, from url: URL) {
-        cell.startImageLoading()
-        loadImage(from: url) { [weak cell] image in
-            cell?.setUserImage(from: image)
-            cell?.stopImageLoading()
-        }
+    func cell(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
+        return binded(tableView: tableView, at: indexPath)
     }
 
-    private func loadImage(from url: URL, completion: @escaping (UIImage) -> Void) {
-        viewModel.load(from: url, completion: completion)
+    private func loadImage() {
+        viewModel.load()
     }
 
     func preload() {
-        if let url = item.userImageURL {
-            viewModel.load(from: url) { _ in }
-        }
+        loadImage()
     }
 
     func cancel() {

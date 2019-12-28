@@ -40,6 +40,10 @@ final class QiitaListCell: UITableViewCell {
         userImageView.image = nil
     }
 
+    var isLoading: Bool {
+        return indicator.isAnimating
+    }
+
     func startImageLoading() {
         indicator.startAnimating()
     }

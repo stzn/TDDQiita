@@ -31,14 +31,14 @@ public struct QiitaListUIComposer {
     }
 
     private static func adaptQiitaItemsTo(_ viewController: QiitaListViewController,
-                                         imageLoader: QiitaImageLoader) -> ([QiitaItem]) -> Void {
+                                          imageLoader: QiitaImageLoader) -> ([QiitaItem]) -> Void {
         return { [weak viewController] items in
             let cellControllers: [QiitaListCellController] = items.map { item in
                 QiitaListCellController(
                     viewModel: QiitaListImageViewModel(
+                        item: convertItemForDisplay(item),
                         loader: imageLoader,
-                        imageTransformer: convertToUserImage),
-                    item: convertItemForDisplay(item))
+                        imageTransformer: convertToUserImage))
             }
             viewController?.cellControllers.append(contentsOf: cellControllers)
             viewController?.updateTableView()
