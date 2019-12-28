@@ -8,20 +8,30 @@
 
 import QiitaFeature
 
-final class QiitaListImageViewModel {
+final class QiitaListImageViewModel<Image> {
     private var task: QiitaImageLoaderTask?
     private let loader: QiitaImageLoader
-    init(loader: QiitaImageLoader) {
+    private let imageTransformer: (Data?) -> Image
+    init(loader: QiitaImageLoader, imageTransformer: @escaping (Data?) -> Image) {
         self.loader = loader
+        self.imageTransformer = imageTransformer
     }
 
-    func load(from url: URL, completion: @escaping (Result<Data?, Error>) -> Void) {
+    func load(from url: URL, completion: @escaping (Image) -> Void) {
         task = loader.load(url: url) { [weak self] result in
-            guard self?.task != nil else {
-                completion(.success(nil))
+            guard let self = self else {
                 return
             }
-            completion(result)
+            guard self.task != nil else {
+                completion(self.imageTransformer(nil))
+                return
+            }
+            switch result {
+            case .success(let .some(data)):
+                completion(self.imageTransformer(data))
+            case .success, .failure:
+                completion(self.imageTransformer(nil))
+            }
         }
     }
 

@@ -11,10 +11,10 @@ import UIKit
 let noUserImage = UIImage(systemName: "nosign")!
 
 final class QiitaListCellController {
-    private let viewModel: QiitaListImageViewModel
+    private let viewModel: QiitaListImageViewModel<UIImage>
     let item: DisplayQiitaItem
 
-    init(viewModel: QiitaListImageViewModel, item: DisplayQiitaItem) {
+    init(viewModel: QiitaListImageViewModel<UIImage>, item: DisplayQiitaItem) {
         self.viewModel = viewModel
         self.item = item
     }
@@ -38,13 +38,7 @@ final class QiitaListCellController {
     }
 
     private func loadImage(from url: URL, completion: @escaping (UIImage) -> Void) {
-        viewModel.load(from: url) { result in
-            if let data = try? result.get(), let image = UIImage(data: data) {
-                completion(image)
-            } else {
-                completion(noUserImage)
-            }
-        }
+        viewModel.load(from: url, completion: completion)
     }
 
     func preload() {

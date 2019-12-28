@@ -35,11 +35,21 @@ public struct QiitaListUIComposer {
         return { [weak viewController] items in
             let cellControllers: [QiitaListCellController] = items.map { item in
                 QiitaListCellController(
-                    viewModel: QiitaListImageViewModel(loader: imageLoader),
+                    viewModel: QiitaListImageViewModel(
+                        loader: imageLoader,
+                        imageTransformer: convertToUserImage),
                     item: convertItemForDisplay(item))
             }
             viewController?.cellControllers.append(contentsOf: cellControllers)
             viewController?.updateTableView()
+        }
+    }
+
+    private static func convertToUserImage(_ data: Data?) -> UIImage {
+        if let data = data, let image = UIImage(data: data) {
+            return image
+        } else {
+            return noUserImage
         }
     }
 
