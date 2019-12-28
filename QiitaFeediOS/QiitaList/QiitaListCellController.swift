@@ -32,7 +32,7 @@ final class QiitaListCellController {
         for cell: QiitaListCell, at indexPath: IndexPath, from url: URL) {
         cell.startImageLoading()
         loadImage(from: url) { [weak cell] image in
-            cell?.setUserImage(image: image)
+            cell?.setUserImage(from: image)
             cell?.stopImageLoading()
         }
     }
