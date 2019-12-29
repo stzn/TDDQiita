@@ -8,14 +8,14 @@
 
 import QiitaFeature
 
-final class QiitaListViewModel {
-    var onLoadStateChange: (() -> Void)?
-    var onRefreshStateChange: (() -> Void)?
-    var onLoad: (([QiitaItem]) -> Void)!
-    var onError: ((Error) -> Void)!
+public final class QiitaListViewModel {
+    public var onLoadStateChange: (() -> Void)?
+    public var onRefreshStateChange: (() -> Void)?
+    public var onLoad: (([QiitaItem]) -> Void)?
+    public var onError: ((Error) -> Void)?
     
     private let loader: QiitaLoader
-    init(loader: QiitaLoader) {
+    public init(loader: QiitaLoader) {
         self.loader = loader
     }
 
@@ -38,9 +38,9 @@ final class QiitaListViewModel {
     private func handleResult(result: QiitaLoader.Result) {
         switch result {
         case .success(let items):
-            onLoad(items)
+            onLoad?(items)
         case .failure(let error):
-            onError(error)
+            onError?(error)
         }
     }
 }

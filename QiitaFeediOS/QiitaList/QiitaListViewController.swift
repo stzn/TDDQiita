@@ -17,14 +17,12 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
         case main
     }
 
+    public var cellControllers: [QiitaListCellController] = []
+    public var viewModel: QiitaListViewModel!
+    public static let noUserImage = UIImage(systemName: "nosign")!
+    
     private var dataSource: UITableViewDiffableDataSource<Section, DisplayQiitaItem>!
-
-    var cellControllers: [QiitaListCellController] = []
-
     private(set) var refreshControl = UIRefreshControl()
-
-    var viewModel: QiitaListViewModel!
-
     private var isLoading: Bool {
         return indicator.isAnimating || refreshControl.isRefreshing
     }
@@ -45,13 +43,13 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
         load(shouldRefresh: true)
     }
 
-    func configureRefreshControl() {
+    public func configureRefreshControl() {
         refreshControl.isRefreshing ?
             refreshControl.endRefreshing()
             : refreshControl.beginRefreshing()
     }
 
-    func configureIndicator() {
+    public func configureIndicator() {
         indicator.isAnimating ?
             indicator.stopAnimating()
             : indicator.startAnimating()
@@ -80,13 +78,13 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    func updateTableView() {
+    public func updateTableView() {
         var snapshot = dataSource.snapshot()
         snapshot.appendItems(cellControllers.map { $0.item }, toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    func setError(_ error: Error) {
+    public func setError(_ error: Error) {
         errorView.message = error.localizedDescription
     }
 

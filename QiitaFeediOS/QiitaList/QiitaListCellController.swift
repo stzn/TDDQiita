@@ -8,13 +8,11 @@
 
 import UIKit
 
-let noUserImage = UIImage(systemName: "nosign")!
-
-final class QiitaListCellController {
+public final class QiitaListCellController {
     var item: DisplayQiitaItem { viewModel.item }
 
     private let viewModel: QiitaListImageViewModel<UIImage>
-    init(viewModel: QiitaListImageViewModel<UIImage>) {
+    public init(viewModel: QiitaListImageViewModel<UIImage>) {
         self.viewModel = viewModel
     }
 

@@ -9,9 +9,10 @@
 import Foundation
 import UIKit
 import QiitaFeature
+import QiitaFeediOS
 
-public struct QiitaListUIComposer {
-    public static func composeQiitaListViewController(listLoader: QiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
+struct QiitaListUIComposer {
+    static func composeQiitaListViewController(listLoader: QiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
         let viewController = QiitaListViewController.instantiate()
 
         let viewModel = QiitaListViewModel(loader: MainQueueDispatchDecorator(decoratee: listLoader))
@@ -49,7 +50,7 @@ public struct QiitaListUIComposer {
         if let data = data, let image = UIImage(data: data) {
             return image
         } else {
-            return noUserImage
+            return QiitaListViewController.noUserImage
         }
     }
 

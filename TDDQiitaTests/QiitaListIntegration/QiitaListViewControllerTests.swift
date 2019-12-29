@@ -8,7 +8,8 @@
 
 import XCTest
 import QiitaFeed
-@testable import QiitaFeediOS
+import QiitaFeediOS
+@testable import TDDQiita
 
 class QiitaListViewControllerTests: XCTestCase {
     func testInitNotDataLoaded() {
@@ -132,12 +133,12 @@ class QiitaListViewControllerTests: XCTestCase {
         let view0 = vc.simulateRenderedViewNotVisible(at: 0)
         loader.completeImageLoad(with: .success(anyImageData), at: 0)
         XCTAssertEqual(loader.canceledURLs, [item0.userImageURL])
-        XCTAssertEqual(view0?.userImage, noUserImageData)
+        XCTAssertEqual(view0?.userImage, vc.noUserImageData)
 
         let view1 = vc.simulateRenderedViewNotVisible(at: 1)
         loader.completeImageLoad(with: .success(anyImageData), at: 1)
         XCTAssertEqual(loader.canceledURLs, [item0.userImageURL, item1.userImageURL!])
-        XCTAssertEqual(view1?.userImage, noUserImageData)
+        XCTAssertEqual(view1?.userImage, vc.noUserImageData)
     }
 
     func testShowIndicatorWhenImageLoading() {
@@ -186,7 +187,7 @@ class QiitaListViewControllerTests: XCTestCase {
 
         let view0 = vc.simulateRenderedViewVisible(at: 0)
         loader.completeImageLoad(with: .success(Data("invalid data".utf8)), at: 0)
-        XCTAssertEqual(view0?.userImage, noUserImageData)
+        XCTAssertEqual(view0?.userImage, vc.noUserImageData)
     }
 
     func testNoUserImageRenderWhenErrorOccured() {
@@ -197,7 +198,7 @@ class QiitaListViewControllerTests: XCTestCase {
 
         let view0 = vc.simulateRenderedViewVisible(at: 0)
         loader.completeImageLoad(with: .failure(anyNSError), at: 0)
-        XCTAssertEqual(view0?.userImage, noUserImageData)
+        XCTAssertEqual(view0?.userImage, vc.noUserImageData)
     }
 
     func testNotImageRenderWhenCellNotVisibleAnymore() {
@@ -303,9 +304,5 @@ class QiitaListViewControllerTests: XCTestCase {
 
     private var anyImageData: Data {
         UIImage.make(color: .black).pngData()!
-    }
-
-    private var noUserImageData: Data {
-        noUserImage.pngData()!
     }
 }

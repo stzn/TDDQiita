@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol StoryboardInstantiatable {
+public protocol StoryboardInstantiatable {
     static func instantiate() -> Self
 }
 
 extension StoryboardInstantiatable where Self: UIViewController {
-    static func instantiate() -> Self {
+    public static func instantiate() -> Self {
         let viewControllerName = String(describing: Self.self)
         return UIStoryboard(name: viewControllerName,
                             bundle: Bundle(for: Self.self))

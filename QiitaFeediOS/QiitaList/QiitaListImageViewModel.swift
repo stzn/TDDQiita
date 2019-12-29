@@ -8,7 +8,7 @@
 
 import QiitaFeature
 
-final class QiitaListImageViewModel<Image> {
+public final class QiitaListImageViewModel<Image> {
     let item: DisplayQiitaItem
     var onLoad: ((Image) -> Void)?
     var onLoadingStateChange: (() -> Void)?
@@ -16,7 +16,7 @@ final class QiitaListImageViewModel<Image> {
     private var task: QiitaImageLoaderTask?
     private let loader: QiitaImageLoader
     private let imageTransformer: (Data?) -> Image
-    init(item: DisplayQiitaItem,
+    public init(item: DisplayQiitaItem,
          loader: QiitaImageLoader,
          imageTransformer: @escaping (Data?) -> Image) {
         self.item = item

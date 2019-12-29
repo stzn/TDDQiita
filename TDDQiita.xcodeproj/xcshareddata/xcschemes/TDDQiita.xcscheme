@@ -29,10 +29,10 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D6B1B43423AED8C200429B47"
+               BlueprintIdentifier = "D6CD4E5123B84B070052D8F2"
                BuildableName = "QiitaFeediOSTests.xctest"
                BlueprintName = "QiitaFeediOSTests"
                ReferencedContainer = "container:TDDQiita.xcodeproj">
@@ -52,9 +52,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D661630523B69C0500394232"
-               BuildableName = "QiitaFeatureTests.xctest"
-               BlueprintName = "QiitaFeatureTests"
+               BlueprintIdentifier = "D6CD4E4323B84AE40052D8F2"
+               BuildableName = "TDDQiitaTests.xctest"
+               BlueprintName = "TDDQiitaTests"
                ReferencedContainer = "container:TDDQiita.xcodeproj">
             </BuildableReference>
          </TestableReference>
