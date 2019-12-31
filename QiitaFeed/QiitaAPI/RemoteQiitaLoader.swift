@@ -33,7 +33,7 @@ public final class RemoteQiitaLoader: QiitaLoader {
         self.client = client
     }
 
-    public func load(completion: @escaping (QiitaLoader.Result) -> Void) {
+    public func load(completion: @escaping Completion) {
         guard let urlWithQuery = constructURL(url: url) else {
             assertionFailure("can not construct url from \(self.url)")
             return
@@ -41,7 +41,12 @@ public final class RemoteQiitaLoader: QiitaLoader {
         get(from: urlWithQuery, completion: completion)
     }
 
-    private func get(from url: URL, completion: @escaping (QiitaLoader.Result) -> Void) {
+    public func refresh(completion: @escaping Completion) {
+        self.pagination = nil
+        get(from: url, completion: completion)
+    }
+
+    private func get(from url: URL, completion: @escaping Completion) {
         client.get(from: url) { [weak self] result in
             guard let self = self else {
                 return

@@ -39,6 +39,10 @@ final class QiitaLoaderSpy: QiitaLoader, QiitaImageLoader {
         receivedCompletions.append(completion)
     }
 
+    func refresh(completion: @escaping QiitaLoader.Completion) {
+        receivedCompletions.append(completion)
+    }
+
     func complete(with result: QiitaLoader.Result, at index: Int = 0) {
         receivedCompletions[index](result)
     }

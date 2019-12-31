@@ -36,21 +36,21 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
 
     private func setRefreshControl() {
         tableView.refreshControl = self.refreshControl
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(refreshRequest), for: .valueChanged)
     }
 
-    @objc func refresh() {
+    @objc func refreshRequest() {
         load(shouldRefresh: true)
     }
 
     public func configureRefreshControl() {
-        refreshControl.isRefreshing ?
+        refreshControl.isRefreshing || !refreshControl.isHidden ?
             refreshControl.endRefreshing()
             : refreshControl.beginRefreshing()
     }
 
     public func configureIndicator() {
-        indicator.isAnimating ?
+        indicator.isAnimating || !indicator.isHidden ?
             indicator.stopAnimating()
             : indicator.startAnimating()
     }
@@ -59,23 +59,35 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
         tableView.delegate = self
         tableView.prefetchDataSource = self
         setupDataSource()
-        initTableView()
+    }
+
+    private func setupDataSource() {
+        dataSource = UITableViewDiffableDataSource<Section, DisplayQiitaItem>(tableView: tableView) { [weak self] _, indexPath, item in
+            return self?.cellForRowAt(indexPath: indexPath, with: item)
+        }
+        clearDataSource()
+    }
+
+    private func clearDataSource() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, DisplayQiitaItem>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems([])
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     private func load(shouldRefresh: Bool) {
         errorView.message = nil
         if shouldRefresh {
-            viewModel.refresh()
+            refresh()
         } else {
             viewModel.load()
         }
     }
 
-    func initTableView() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, DisplayQiitaItem>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(cellControllers.map { $0.item })
-        dataSource.apply(snapshot, animatingDifferences: false)
+    private func refresh() {
+        cellControllers = []
+        clearDataSource()
+        viewModel.refresh()
     }
 
     public func updateTableView() {
@@ -88,16 +100,6 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
         errorView.message = error.localizedDescription
     }
 
-    private func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<Section, DisplayQiitaItem>(tableView: tableView) { [weak self] _, indexPath, item in
-            return self?.cellForRowAt(indexPath: indexPath, with: item)
-        }
-        var snapshot = NSDiffableDataSourceSnapshot<Section, DisplayQiitaItem>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems([])
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
-
     @discardableResult
     private func cellForRowAt(indexPath: IndexPath, with item: DisplayQiitaItem) -> UITableViewCell? {
         return cellControllers[indexPath.row].cell(for: tableView, at: indexPath) as! QiitaListCell
@@ -106,8 +108,10 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
 
 extension QiitaListViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cellControllers[indexPath.row].cancel()
-        cacncel(at: indexPath)
+        if cellControllers.count > indexPath.row {
+            cellControllers[indexPath.row].cancel()
+            cacncel(at: indexPath)
+        }
     }
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {

@@ -10,4 +10,5 @@ public protocol QiitaLoader {
     typealias Result = Swift.Result<[QiitaItem], Error>
     typealias Completion = (Result) -> Void
     func load(completion: @escaping Completion)
+    func refresh(completion: @escaping Completion)
 }

@@ -49,11 +49,11 @@ extension QiitaListViewController {
     }
 
     var isLoadingIndicatorShowing: Bool {
-        !indicator.isHidden
+        !indicator.isHidden || indicator.isAnimating
     }
 
     var isReloadingIndicatorShowing: Bool {
-        refreshControl.isRefreshing
+        !refreshControl.isHidden || refreshControl.isRefreshing
     }
 
     var errorMesage: String? {

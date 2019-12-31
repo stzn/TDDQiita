@@ -29,7 +29,7 @@ public final class QiitaListViewModel {
 
     func refresh() {
         onRefreshStateChange?()
-        loader.load { [weak self] result in
+        loader.refresh { [weak self] result in
             self?.handleResult(result: result)
             self?.onRefreshStateChange?()
         }

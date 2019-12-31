@@ -293,6 +293,32 @@ class QiitaListViewControllerTests: XCTestCase {
         assertThat(vc: vc, hasViewConfiredFor: item, at: 0)
     }
 
+     func testRefreshRenderDataRefreshed() {
+         let item0 = anyQiitaItem
+         let item1 = anyQiitaItem
+         let item2 = anyQiitaItem
+
+         let (vc, loader) = makeTestTarget()
+         vc.loadViewIfNeeded()
+         XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 0)
+
+         loader.complete(with: .success([item0]), at: 0)
+         vc.simulateRenderedViewVisible(at: 0)
+         XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 1)
+
+         vc.simulateLoadMoreAction()
+         loader.complete(with: .success([item1]), at: 1)
+         vc.simulateRenderedViewVisible(at: 1)
+         XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 2)
+
+         vc.simulateUserRefreshAction()
+         loader.complete(with: .success([item2]), at: 0)
+         vc.simulateRenderedViewVisible(at: 0)
+         XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 1)
+
+         assertThat(vc: vc, isRendering: [item2])
+     }
+
     // MARK: Helpers
     private func makeTestTarget(file: StaticString = #file, line: UInt = #line) -> (QiitaListViewController, QiitaLoaderSpy) {
         let loader = QiitaLoaderSpy()

@@ -30,6 +30,12 @@ extension MainQueueDispatchDecorator: QiitaLoader where T == QiitaLoader {
             self?.dispatch { completion(result) }
         }
     }
+
+    func refresh(completion: @escaping QiitaLoader.Completion) {
+        decoratee.refresh { [weak self] result in
+            self?.dispatch { completion(result) }
+        }
+    }
 }
 
 extension MainQueueDispatchDecorator: QiitaImageLoader where T == QiitaImageLoader {

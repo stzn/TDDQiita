@@ -45,6 +45,14 @@ extension LocalQiitaLoader: QiitaCache {
 
 extension LocalQiitaLoader: QiitaLoader {
     public func load(completion: @escaping Completion) {
+        get(completion: completion)
+    }
+
+    public func refresh(completion: @escaping Completion) {
+        get(completion: completion)
+    }
+
+    private func get(completion: @escaping Completion) {
         store.get { [weak self] result in
             guard let self = self else {
                 return
