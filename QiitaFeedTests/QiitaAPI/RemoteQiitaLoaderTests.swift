@@ -88,8 +88,7 @@ class RemoteQiitaLoaderTests: XCTestCase {
     private func makeTestTarget(file: StaticString = #file, line: UInt = #line)
         -> (RemoteQiitaLoader, HTTPClientSpy) {
             let client = HTTPClientSpy()
-            let target = RemoteQiitaLoader(url: anyURL, client: client,
-                                           decoder: QiitaAPIDecoder.self)
+            let target = RemoteQiitaLoader(url: anyURL, client: client)
             trackForMemoryLeaks(target, file: file, line: line)
             return (target, client)
     }

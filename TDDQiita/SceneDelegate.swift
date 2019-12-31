@@ -29,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private lazy var remoteQiitaLoader: RemoteQiitaLoader = {
         RemoteQiitaLoader(url: URL(string: "https://qiita.com/api/v2/items")!,
-                          client: httpClient, decoder: QiitaAPIDecoder.self)
+                          client: httpClient)
     }()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -43,7 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func configureWindow() {
         let qiitaURL = URL(string: "https://qiita.com/api/v2/items")!
-        let remoteQiitaLoader = RemoteQiitaLoader(url: qiitaURL, client: httpClient, decoder: QiitaAPIDecoder.self)
+        let remoteQiitaLoader = RemoteQiitaLoader(url: qiitaURL, client: httpClient)
         let remoteQiitaImageLoader = RemoteQiitaImageLoader(client: httpClient)
 //        let localQiitaLoader = LocalQiitaLoader(store: store, currentDate: Date.init)
 //        let localQiitaImageLoader = LocalQiitaImageLoader(store: imageStore, currentDate: Date.init)
