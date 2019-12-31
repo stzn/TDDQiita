@@ -101,25 +101,4 @@ public final class RemoteQiitaLoader: QiitaLoader {
         }
         return items
     }
-
-    private func convertToQiitaItems(from codableItems: [CodableQiitaItem]) -> [QiitaItem] {
-        codableItems.map { codable in
-            var user: QiitaItem.User?
-            if let codableUser = codable.user {
-                user = QiitaItem.User(
-                    githubLoginName: codableUser.githubLoginName,
-                    profileImageUrl: codableUser.profileImageUrl)
-            }
-            return QiitaItem(id: codable.id,
-                             likesCount: codable.likesCount,
-                             reactionsCount: codable.reactionsCount,
-                             commentsCount: codable.commentsCount,
-                             title: codable.title,
-                             createdAt: Date(fromISO8601: codable.createdAt)!,
-                             updatedAt: Date(fromISO8601: codable.updatedAt)!,
-                             url: codable.url,
-                             tags: codable.tags.map { codable in QiitaItem.Tag(name: codable.name) },
-                             user: user)
-        }
-    }
 }
