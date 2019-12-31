@@ -8,7 +8,7 @@
 
 import QiitaFeature
 
-public struct QiitaAPIDecoder: QiitaJSONDecoder {
+public struct QiitaAPIDecoder {
     public static func decode(from data: Data) throws -> [QiitaItem] {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
