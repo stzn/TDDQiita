@@ -28,9 +28,11 @@ public final class RemoteQiitaLoader: QiitaLoader {
     let perPageCount = 10
     let url: URL
     let client: HTTPClient
-    public init(url: URL, client: HTTPClient) {
+    let decoder: QiitaJSONDecoder.Type
+    public init(url: URL, client: HTTPClient, decoder: QiitaJSONDecoder.Type) {
         self.url = url
         self.client = client
+        self.decoder = decoder
     }
 
     public func load(completion: @escaping Completion) {
@@ -54,11 +56,9 @@ public final class RemoteQiitaLoader: QiitaLoader {
             switch result {
             case .success(let data, let response):
                 do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let items = try decoder.decode([CodableQiitaItem].self, from: data)
+                    let items = try self.decoder.decode(from: data)
                     self.setPagination(from: response)
-                    completion(.success(self.convertToQiitaItems(from: items)))
+                    completion(.success(items))
                 } catch {
                     completion(.failure(Error.invalidData))
                 }
