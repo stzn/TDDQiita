@@ -98,7 +98,12 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
         viewModel.refresh()
     }
 
-    public func updateTableView() {
+    public func updateDisplay(_ cellControllers: [QiitaListCellController]) {
+        self.cellControllers.append(contentsOf: cellControllers)
+        updateTableView()
+    }
+
+    private func updateTableView() {
         var snapshot = dataSource.snapshot()
         let items = cellControllers
             .map { $0.item }
