@@ -64,7 +64,6 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
     }
 
     private func setupTableView() {
-        tableView.dataSource = self
         tableView.delegate = self
         tableView.prefetchDataSource = self
         setupDataSource()
@@ -149,15 +148,5 @@ extension QiitaListViewController: UITableViewDataSourcePrefetching {
 
     private func cacncel(at indexPath: IndexPath) {
         cellControllers[indexPath.row].cancel()
-    }
-}
-
-extension QiitaListViewController: UITableViewDataSource {
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return dataSource.tableView(tableView, cellForRowAt: indexPath)
-    }
-
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.tableView(tableView, numberOfRowsInSection: section)
     }
 }
