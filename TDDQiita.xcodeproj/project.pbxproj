@@ -15,7 +15,6 @@
 		74DA48A923B1CDED00E53D52 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA48A823B1CDED00E53D52 /* ErrorView.swift */; };
 		74E02EED23AB17D500C1335C /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E02EEC23AB17D500C1335C /* Date+.swift */; };
 		74E8ADAD23B2E66E00F4EB75 /* UITableView+Dequeueing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E8ADAC23B2E66E00F4EB75 /* UITableView+Dequeueing.swift */; };
-		74E8ADBB23B3448E00F4EB75 /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E8ADBA23B3448E00F4EB75 /* LoadingIndicator.swift */; };
 		74F7B9AF23A9A40C00D01296 /* QiitaStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F7B9AE23A9A40C00D01296 /* QiitaStore.swift */; };
 		74F7B9B123A9A42600D01296 /* CachedQiitaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F7B9B023A9A42600D01296 /* CachedQiitaItem.swift */; };
 		74F7B9B323A9A45100D01296 /* QiitaCachePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F7B9B223A9A45100D01296 /* QiitaCachePolicy.swift */; };
@@ -178,7 +177,6 @@
 		74E8ADB223B2F78900F4EB75 /* QiitaListViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QiitaListViewController+.swift"; sourceTree = "<group>"; };
 		74E8ADB423B2F7BD00F4EB75 /* QiitaListViewControllerTests+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QiitaListViewControllerTests+.swift"; sourceTree = "<group>"; };
 		74E8ADB623B2F80100F4EB75 /* QiitaListCell+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QiitaListCell+.swift"; sourceTree = "<group>"; };
-		74E8ADBA23B3448E00F4EB75 /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		74F7B9AE23A9A40C00D01296 /* QiitaStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiitaStore.swift; sourceTree = "<group>"; };
 		74F7B9B023A9A42600D01296 /* CachedQiitaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedQiitaItem.swift; sourceTree = "<group>"; };
 		74F7B9B223A9A45100D01296 /* QiitaCachePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiitaCachePolicy.swift; sourceTree = "<group>"; };
@@ -444,7 +442,6 @@
 				D6B1B42523AEB5EC00429B47 /* QiitaList */,
 				D6B1B43023AED8C200429B47 /* Info.plist */,
 				74E8ADAC23B2E66E00F4EB75 /* UITableView+Dequeueing.swift */,
-				74E8ADBA23B3448E00F4EB75 /* LoadingIndicator.swift */,
 			);
 			path = QiitaFeediOS;
 			sourceTree = "<group>";
@@ -883,7 +880,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74E8ADBB23B3448E00F4EB75 /* LoadingIndicator.swift in Sources */,
 				D6B1B44F23AF09D000429B47 /* QiitaListCell.swift in Sources */,
 				74DA48A923B1CDED00E53D52 /* ErrorView.swift in Sources */,
 				D6F2DE9B23BC0E8E00FB8E0C /* LoadingCell.swift in Sources */,

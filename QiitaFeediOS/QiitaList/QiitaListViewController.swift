@@ -24,7 +24,15 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
     private var dataSource: UITableViewDiffableDataSource<Section, DisplayQiitaItem>!
     private(set) var refreshControl = UIRefreshControl()
     private var isLoading: Bool {
-        return indicator.isAnimating || refreshControl.isRefreshing
+        return isRefreshing || isNextLoading
+    }
+
+    private var isRefreshing: Bool {
+        !refreshControl.isHidden || refreshControl.isRefreshing
+    }
+
+    private var isNextLoading: Bool {
+        indicator.isAnimating
     }
 
     override public func viewDidLoad() {
@@ -44,13 +52,13 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
     }
 
     public func configureRefreshControl() {
-        refreshControl.isRefreshing || !refreshControl.isHidden ?
+        isRefreshing ?
             refreshControl.endRefreshing()
             : refreshControl.beginRefreshing()
     }
 
     public func configureIndicator() {
-        indicator.isAnimating || !indicator.isHidden ?
+        isNextLoading ?
             indicator.stopAnimating()
             : indicator.startAnimating()
     }
@@ -93,7 +101,10 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
 
     public func updateTableView() {
         var snapshot = dataSource.snapshot()
-        snapshot.appendItems(cellControllers.map { $0.item }, toSection: .main)
+        let items = cellControllers
+            .map { $0.item }
+            .filter { !snapshot.itemIdentifiers.contains($0) }
+        snapshot.appendItems(items, toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
