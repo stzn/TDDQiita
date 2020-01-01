@@ -10,7 +10,7 @@ import XCTest
 import QiitaFeature
 @testable import QiitaFeediOS
 
-final class QiitaLoaderSpy: QiitaLoader, QiitaImageLoader {
+final class QiitaLoaderSpy: PaginationQiitaLoader, QiitaImageLoader {
     private(set) var canceledURLs: [URL] = []
     private struct Task: QiitaImageLoaderTask {
         let callback: () -> Void
@@ -35,7 +35,7 @@ final class QiitaLoaderSpy: QiitaLoader, QiitaImageLoader {
     }
 
     var receivedCompletions: [QiitaLoader.Completion] = []
-    func load(completion: @escaping QiitaLoader.Completion) {
+    func loadNext(completion: @escaping QiitaLoader.Completion) {
         receivedCompletions.append(completion)
     }
 

@@ -2,20 +2,21 @@
 //  RemoteQiitaLoader.swift
 //  QiitaFeed
 //
-//  Created by Shinzan Takata on 2019/12/15.
-//  Copyright © 2019 shiz. All rights reserved.
+//  Created by Shinzan Takata on 2020/01/01.
+//  Copyright © 2020 shiz. All rights reserved.
 //
 
+import Foundation
 import QiitaFeature
 
-public final class RemoteQiitaLoader: QiitaLoader {
+public final class RemoteQiitaLoader: PaginationQiitaLoader {
     private struct Pagination {
         let nextURL: URL
     }
 
     enum QueryKey {
         static let pageNumber = "page"
-        static let perPageCount = "per_page"
+        static let perPageItemsCount = "per_page"
     }
 
     enum Error: Swift.Error {
@@ -24,26 +25,39 @@ public final class RemoteQiitaLoader: QiitaLoader {
     }
 
     private var pagination: Pagination?
-    
-    let perPageCount = 10
-    let url: URL
+    private(set) var shouldLoadNext = false
+
     let client: HTTPClient
-    public init(url: URL, client: HTTPClient) {
-        self.url = url
+    let baseURL: URL
+    let perPageItemsCount: Int
+    public init(client: HTTPClient, baseURL: URL, perPageItemsCount: Int) {
         self.client = client
+        self.baseURL = baseURL
+        self.perPageItemsCount = perPageItemsCount
     }
 
-    public func load(completion: @escaping Completion) {
-        guard let urlWithQuery = constructURL(url: url) else {
-            assertionFailure("can not construct url from \(self.url)")
+    public func loadNext(completion: @escaping Completion) {
+        guard let urlWithQuery = constructURL(url: baseURL) else {
+            assertionFailure("can not construct url from \(baseURL)")
             return
         }
-        get(from: urlWithQuery, completion: completion)
+        get(from: urlWithQuery) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+
+            guard let items = try? result.get() else {
+                completion(result)
+                return
+            }
+            self.shouldLoadNext = items.count >= self.perPageItemsCount
+            completion(result)
+        }
     }
 
     public func refresh(completion: @escaping Completion) {
         self.pagination = nil
-        get(from: url, completion: completion)
+        get(from: baseURL, completion: completion)
     }
 
     private func get(from url: URL, completion: @escaping Completion) {
@@ -53,16 +67,22 @@ public final class RemoteQiitaLoader: QiitaLoader {
             }
             switch result {
             case .success(let data, let response):
-                do {
-                    let items = try QiitaAPIDecoder.decode(from: data)
-                    self.setPagination(from: response)
-                    completion(.success(items))
-                } catch {
-                    completion(.failure(Error.invalidData))
-                }
+                let result = self.handleResult(data: data, response: response)
+                completion(result)
             case .failure:
                 completion(.failure(Error.connectivity))
             }
+        }
+    }
+
+    private func handleResult(data: Data, response: HTTPURLResponse) -> PaginationQiitaLoader.Result {
+        setPagination(from: response)
+
+        do {
+            let items = try QiitaAPIDecoder.decode(from: data)
+            return .success(items)
+        } catch {
+            return .failure(Error.invalidData)
         }
     }
 
@@ -84,7 +104,7 @@ public final class RemoteQiitaLoader: QiitaLoader {
         }
         component.queryItems = makeQueryItem(from: [
             QueryKey.pageNumber: 1,
-            QueryKey.perPageCount: perPageCount,
+            QueryKey.perPageItemsCount: perPageItemsCount,
         ])
         return component.url
     }
@@ -100,3 +120,4 @@ public final class RemoteQiitaLoader: QiitaLoader {
         return items
     }
 }
+

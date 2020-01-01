@@ -42,7 +42,7 @@ class RemoteQiitaImageLoaderTests: XCTestCase {
     }
 
     // MARK: Helpers
-    typealias Assert = (RemoteQiitaLoader.Result, RemoteQiitaLoader.Result) -> Bool
+    typealias Assert = (RemoteQiitaImageLoader.Result, RemoteQiitaImageLoader.Result) -> Bool
 
     private func expect(_ expected: RemoteQiitaImageLoader.Result,
                         responseResult: HTTPClient.Result,

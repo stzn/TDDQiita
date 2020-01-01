@@ -14,14 +14,14 @@ public final class QiitaListViewModel {
     public var onLoad: (([QiitaItem]) -> Void)?
     public var onError: ((Error) -> Void)?
     
-    private let loader: QiitaLoader
-    public init(loader: QiitaLoader) {
+    private let loader: PaginationQiitaLoader
+    public init(loader: PaginationQiitaLoader) {
         self.loader = loader
     }
 
     func load() {
         onLoadStateChange?()
-        loader.load { [weak self] result in
+        loader.loadNext { [weak self] result in
             self?.handleResult(result: result)
             self?.onLoadStateChange?()
         }

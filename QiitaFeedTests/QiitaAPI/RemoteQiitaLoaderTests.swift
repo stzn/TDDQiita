@@ -1,9 +1,9 @@
 //
-//  QiitaLoaderTests.swift
+//  PaginationRemoteQiitaLoaderTests.swift
 //  QiitaFeedTests
 //
-//  Created by Shinzan Takata on 2019/12/14.
-//  Copyright © 2019 shiz. All rights reserved.
+//  Created by Shinzan Takata on 2020/01/01.
+//  Copyright © 2020 shiz. All rights reserved.
 //
 
 import XCTest
@@ -11,29 +11,103 @@ import QiitaFeature
 @testable import QiitaFeed
 
 class RemoteQiitaLoaderTests: XCTestCase {
-    func testFetchItemsFetched() {
+    typealias Error = RemoteQiitaLoader.Error
+
+    func testLoadNextItemGot() {
+        let (loader, client) = makeTestTarget()
         let item = anyQiitaItem
         let codableItem = converToCodableItem(from: item)
-        expect([item], responseResult: .success((encode([codableItem]), anyHTTPURLResponse)))
+        expectLoadNext(loader, expected: .success([item]), when: {
+            client.completeWith(
+                result: .success((encode([codableItem]), anyHTTPURLResponse))
+            )
+        })
     }
 
-    func testFetchEmptyNoItemFetched() {
-        expect([], responseResult: .success((encode([]), anyHTTPURLResponse)))
+    func testLoadNextHasNextPage() {
+        let (loader, client) = makeTestTarget()
+        let items = [anyQiitaItem, anyQiitaItem]
+        let codableItems = items.map(converToCodableItem(from:))
+        expectLoadNext(loader, expected: .success(items), when: {
+            client.completeWith(
+                result: .success((encode(codableItems), anyHTTPURLResponse))
+            )
+        })
+        XCTAssertEqual(loader.shouldLoadNext, true)
     }
 
-    func testFetchLoadError() {
-        expectError(.connectivity,
-                    responseResult: .failure(HTTPClientError.noData))
+    func testLoadNextNotHasNextPage() {
+        let (loader, client) = makeTestTarget(perPageItemsCount: 3)
+        let items = [anyQiitaItem, anyQiitaItem]
+        let codableItems = items.map(converToCodableItem(from:))
+        expectLoadNext(loader, expected: .success(items), when: {
+            client.completeWith(
+                result: .success((encode(codableItems), anyHTTPURLResponse))
+            )
+        })
+        XCTAssertEqual(loader.shouldLoadNext, false)
     }
 
-    func testFetchDecodeError() {
-        expectError(.invalidData,
-                    responseResult: .success((anyData, anyHTTPURLResponse)))
+    func testRefreshItemGot() {
+        let (loader, client) = makeTestTarget()
+        let item = anyQiitaItem
+        let codableItem = converToCodableItem(from: item)
+        expectRefresh(loader, expected: .success([item]), when: {
+            client.completeWith(
+                result: .success((encode([codableItem]), anyHTTPURLResponse))
+            )
+        })
+    }
+
+    func testLoadNextMultipleItemGot() {
+        let (loader, client) = makeTestTarget()
+        let items = [anyQiitaItem, anyQiitaItem]
+        let codableItems = items.map(converToCodableItem(from:))
+        expectLoadNext(loader, expected: .success(items), when: {
+            client.completeWith(
+                result: .success((encode(codableItems), anyHTTPURLResponse))
+            )
+        })
+    }
+
+    func testRefreshMultipleItemGot() {
+        let (loader, client) = makeTestTarget()
+        let items = [anyQiitaItem, anyQiitaItem]
+        let codableItems = items.map(converToCodableItem(from:))
+        expectRefresh(loader, expected: .success(items), when: {
+            client.completeWith(
+                result: .success((encode(codableItems), anyHTTPURLResponse))
+            )
+        })
+    }
+
+    func testLoadNextEmptyNoItemGot() {
+        let (loader, client) = makeTestTarget()
+        expectLoadNext(loader, expected: .success([]), when: {
+            client.completeWith(
+                result: .success((encode([]), anyHTTPURLResponse)))
+        })
+    }
+
+    func testLoadNextLoadError() {
+        let (loader, client) = makeTestTarget()
+        expectLoadNext(loader, expected: .failure(Error.connectivity), when: {
+            client.completeWith(
+                result: .failure(HTTPClientError.noData))
+        })
+    }
+
+    func testLoadNextDecodeError() {
+        let (loader, client) = makeTestTarget()
+        expectLoadNext(loader, expected: .failure(RemoteQiitaLoader.Error.invalidData), when: {
+            client.completeWith(
+                result: .success((anyData, anyHTTPURLResponse)))
+        })
     }
 
     func testQueryParameter() {
         let (loader, client) = makeTestTarget()
-        loader.load { _ in }
+        loader.loadNext { _ in }
 
         guard let url = client.receivedValues.first?.url else {
             XCTFail("url must not be nil")
@@ -41,56 +115,66 @@ class RemoteQiitaLoaderTests: XCTestCase {
         }
         assertQueryParameters(url: url, parameters: [
             RemoteQiitaLoader.QueryKey.pageNumber: 1,
-            RemoteQiitaLoader.QueryKey.perPageCount: loader.perPageCount
+            RemoteQiitaLoader.QueryKey.perPageItemsCount: loader.perPageItemsCount
         ])
     }
 
     // MARK: Helpers
-    typealias Assert = (RemoteQiitaLoader.Result, RemoteQiitaLoader.Result) -> Bool
-
-    private func expect(_ expected: [QiitaItem],
-                        responseResult: HTTPClient.Result,
-                        file: StaticString = #file, line: UInt = #line) {
-        let (loader, client) = makeTestTarget(file: file, line: line)
-        let exp = expectation(description: "expect")
-        loader.load { received in
-            defer { exp.fulfill() }
-
-            switch received {
-            case .success(let items):
-                XCTAssertEqual(items, expected, file: file, line: line)
-            case .failure:
-                XCTFail("\(expected) want but got \(received)", file: file, line: line)
-            }
-        }
-        client.completeWith(result: responseResult)
-        wait(for: [exp], timeout: 1.0)
-    }
-
-    private func expectError(_ expected: RemoteQiitaLoader.Error,
-                             responseResult: HTTPClient.Result,
-                             file: StaticString = #file, line: UInt = #line) {
-        let (loader, client) = makeTestTarget(file: file, line: line)
-        let exp = expectation(description: "expect error")
-        loader.load { received in
-            defer { exp.fulfill() }
-
-            if case .failure(let error) = received {
-                XCTAssertEqual(error as? RemoteQiitaLoader.Error, expected)
-            } else {
-                XCTFail("failure want but got \(received)")
-            }
-        }
-        client.completeWith(result: responseResult)
-        wait(for: [exp], timeout: 1.0)
-    }
-
-    private func makeTestTarget(file: StaticString = #file, line: UInt = #line)
+    private func makeTestTarget(
+        perPageItemsCount: Int = 1,
+        file: StaticString = #file, line: UInt = #line)
         -> (RemoteQiitaLoader, HTTPClientSpy) {
             let client = HTTPClientSpy()
-            let target = RemoteQiitaLoader(url: anyURL, client: client)
+            let target = RemoteQiitaLoader(
+                client: client, baseURL: anyURL,
+                perPageItemsCount: perPageItemsCount)
             trackForMemoryLeaks(target, file: file, line: line)
             return (target, client)
+    }
+
+    typealias Assert = (RemoteQiitaLoader.Result, RemoteQiitaLoader.Result) -> Bool
+
+    private func expectLoadNext(_ loader: RemoteQiitaLoader,
+                                expected: PaginationQiitaLoader.Result,
+                                when action: () -> Void,
+                                file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "wait for load next")
+        loader.loadNext { [weak self] received in
+            self?.assertResult(
+                received: received, expected: expected)
+            exp.fulfill()
+        }
+        action()
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    private func expectRefresh(_ loader: RemoteQiitaLoader,
+                               expected: PaginationQiitaLoader.Result,
+                               when action: () -> Void,
+                               file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "wait for refresh")
+        loader.refresh { [weak self] received in
+            self?.assertResult(
+                received: received, expected: expected)
+            exp.fulfill()
+        }
+        action()
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    private func assertResult(
+        received: PaginationQiitaLoader.Result,
+        expected: PaginationQiitaLoader.Result,
+        file: StaticString = #file, line: UInt = #line) {
+
+        switch (received, expected) {
+        case (.success(let lhs), .success(let rhs)):
+            XCTAssertEqual(lhs, rhs, file: file, line: line)
+        case (.failure(let lhs as NSError), .failure(let rhs as NSError)):
+            XCTAssertEqual(lhs, rhs, file: file, line: line)
+        default:
+            XCTFail("except \(expected), but got \(received)", file: file, line: line)
+        }
     }
 
     private func assertQueryParameters(

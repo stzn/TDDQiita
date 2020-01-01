@@ -2,8 +2,8 @@
 //  LocalQiitaLoaderTests.swift
 //  QiitaFeedTests
 //
-//  Created by Shinzan Takata on 2019/12/15.
-//  Copyright © 2019 shiz. All rights reserved.
+//  Created by Shinzan Takata on 2020/01/01.
+//  Copyright © 2020 shiz. All rights reserved.
 //
 
 import XCTest
@@ -16,74 +16,146 @@ class LocalQiitaLoaderTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages.count, 0)
     }
 
-    func testGetWithoutCacheNoItemGot() {
+    func testLoadNextWithoutCacheNoItemGot() {
         let (loader, store) = makeTestTarget()
-        expect(loader, expected: .success([]), when: {
+        expectLoadNext(loader, expected: .success([]), when: {
             store.completeWith(.success(nil))
         })
     }
 
-    func testGetErrorNoItemGot() {
+    func testRefreshWithoutCacheNoItemGot() {
+        let (loader, store) = makeTestTarget()
+        expectRefresh(loader, expected: .success([]), when: {
+            store.completeWith(.success(nil))
+        })
+    }
+
+    func testLoadNextErrorNoItemGot() {
         let (loader, store) = makeTestTarget()
         let error = anyNSError
-        expect(loader, expected: .failure(error), when: {
+        expectLoadNext(loader, expected: .failure(error), when: {
             store.completeWith(.failure(error))
         })
     }
 
-    func testGetWithNotExpiredCacheItemGot() {
+    func testRefreshErrorNoItemGot() {
+        let (loader, store) = makeTestTarget()
+        let error = anyNSError
+        expectLoadNext(loader, expected: .failure(error), when: {
+            store.completeWith(.failure(error))
+        })
+    }
+
+    func testLoadNextWithValidCacheItemGot() {
         let currentDate = Date()
-        let timestamp = currentDate.minusQiitaCacheMaxAge()
+        let timestamp = currentDate.minusQiitaCacheMaxAge().advanced(by: 1)
+        let items: [QiitaItem] = (0..<3).map { _ in anyQiitaItem }
+        let item = CachedQiitaItem(items: items, timestamp: timestamp)
+        let (loader, store) = makeTestTarget()
+        expectLoadNext(loader, expected: .success([item.items[0]]), when: {
+            store.save(item) { _ in }
+            store.completeWith(.success(item))
+        }, currentDate: { currentDate })
+        expectLoadNext(loader, expected: .success([item.items[1]]),
+               when: {}, currentDate: { currentDate })
+        expectLoadNext(loader, expected: .success([item.items[2]]),
+               when: {}, currentDate: { currentDate })
+    }
+
+    func testLoadNextWithInvalidNoItemGot() {
+        let currentDate = Date()
+        let timestamp = currentDate.minusQiitaCacheMaxAge().advanced(by: -1)
         let items = [anyQiitaItem]
         let item = CachedQiitaItem(items: items, timestamp: timestamp)
         let (loader, store) = makeTestTarget()
-        expect(loader, expected: .success([]), when: {
+        expectLoadNext(loader, expected: .success([]), when: {
             store.save(item) { _ in }
             store.completeWith(.success(item))
         }, currentDate: { currentDate })
     }
 
-    func testGetWithExpiredCacheNoItemGot() {
+    func testRefreshWithValidCacheItemGot() {
         let currentDate = Date()
         let timestamp = currentDate.minusQiitaCacheMaxAge().advanced(by: 1)
-        let item = CachedQiitaItem(items: [anyQiitaItem], timestamp: timestamp)
+        let items = [anyQiitaItem, anyQiitaItem]
+        let item = CachedQiitaItem(items: items, timestamp: timestamp)
         let (loader, store) = makeTestTarget()
-        expect(loader, expected: .success(item.items), when: {
+        expectLoadNext(loader, expected: .success([item.items[0]]), when: {
+            store.save(item) { _ in }
+            store.completeWith(.success(item), at: 0)
+        }, currentDate: { currentDate })
+        expectRefresh(loader, expected: .success([item.items[0]]), when: {
+            store.completeWith(.success(item), at: 1)
+        }, currentDate: { currentDate })
+    }
+
+    func testRefreshWithInvalidNoItemGot() {
+        let currentDate = Date()
+        let timestamp = currentDate.minusQiitaCacheMaxAge().advanced(by: -1)
+        let items = [anyQiitaItem, anyQiitaItem]
+        let item = CachedQiitaItem(items: items, timestamp: timestamp)
+        let (loader, store) = makeTestTarget()
+        expectRefresh(loader, expected: .success([]), when: {
             store.save(item) { _ in }
             store.completeWith(.success(item))
         }, currentDate: { currentDate })
     }
+
 
     // MARK: Helpers
     private func makeTestTarget(currentDate: @escaping () -> Date = Date.init,
                                 file: StaticString = #file, line: UInt = #line)
         -> (LocalQiitaLoader, QiitaStoreSpy) {
             let store = QiitaStoreSpy()
-            let loader = LocalQiitaLoader(store: store, currentDate: currentDate)
+            let loader = LocalQiitaLoader(
+                store: store, perPageItemsCount: 1, currentDate: currentDate)
             trackForMemoryLeaks(loader, file: file, line: line)
             trackForMemoryLeaks(store, file: file, line: line)
             return (loader, store)
     }
 
-    private func expect(_ loader: LocalQiitaLoader,
+    private func expectLoadNext(_ loader: LocalQiitaLoader,
                         expected: QiitaLoader.Result,
                         when action: () -> Void,
                         currentDate: @escaping () -> Date = Date.init,
                         file: StaticString = #file, line: UInt = #line) {
-        let exp = expectation(description: "wait for get")
-        loader.load { received in
-            defer { exp.fulfill() }
-
-            switch (received, expected) {
-            case (.success(let lhs), .success(let rhs)):
-                XCTAssertEqual(lhs, rhs, file: file, line: line)
-            case (.failure(let lhs as NSError), .failure(let rhs as NSError)):
-                XCTAssertEqual(lhs, rhs, file: file, line: line)
-            default:
-                XCTFail("except \(expected), but got \(received)", file: file, line: line)
-            }
+        let exp = expectation(description: "wait for load next")
+        loader.loadNext { [weak self] received in
+            self?.assertResult(
+                received: received, expected: expected)
+            exp.fulfill()
         }
         action()
         wait(for: [exp], timeout: 1.0)
+    }
+
+    private func expectRefresh(_ loader: LocalQiitaLoader,
+                               expected: QiitaLoader.Result,
+                               when action: () -> Void,
+                               currentDate: @escaping () -> Date = Date.init,
+                               file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "wait for refresh")
+        loader.refresh { [weak self] received in
+            self?.assertResult(
+                received: received, expected: expected)
+            exp.fulfill()
+        }
+        action()
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    private func assertResult(
+        received: PaginationQiitaLoader.Result,
+        expected: PaginationQiitaLoader.Result,
+        file: StaticString = #file, line: UInt = #line) {
+
+        switch (received, expected) {
+        case (.success(let lhs), .success(let rhs)):
+            XCTAssertEqual(lhs, rhs, file: file, line: line)
+        case (.failure(let lhs as NSError), .failure(let rhs as NSError)):
+            XCTAssertEqual(lhs, rhs, file: file, line: line)
+        default:
+            XCTFail("except \(expected), but got \(received)", file: file, line: line)
+        }
     }
 }

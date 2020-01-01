@@ -12,7 +12,7 @@ import QiitaFeature
 import QiitaFeediOS
 
 struct QiitaListUIComposer {
-    static func composeQiitaListViewController(listLoader: QiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
+    static func composeQiitaListViewController(listLoader: PaginationQiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
         let viewController = QiitaListViewController.instantiate()
 
         let viewModel = QiitaListViewModel(loader: MainQueueDispatchDecorator(decoratee: listLoader))

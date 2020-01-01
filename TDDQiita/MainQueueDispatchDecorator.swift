@@ -24,14 +24,14 @@ final class MainQueueDispatchDecorator<T> {
     }
 }
 
-extension MainQueueDispatchDecorator: QiitaLoader where T == QiitaLoader {
-    func load(completion: @escaping QiitaLoader.Completion) {
-        decoratee.load { [weak self] result in
+extension MainQueueDispatchDecorator: PaginationQiitaLoader where T == PaginationQiitaLoader {
+    func loadNext(completion: @escaping PaginationQiitaLoader.Completion) {
+        decoratee.loadNext { [weak self] result in
             self?.dispatch { completion(result) }
         }
     }
 
-    func refresh(completion: @escaping QiitaLoader.Completion) {
+    func refresh(completion: @escaping PaginationQiitaLoader.Completion) {
         decoratee.refresh { [weak self] result in
             self?.dispatch { completion(result) }
         }
