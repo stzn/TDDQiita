@@ -9,7 +9,6 @@
 import UIKit
 import QiitaFeature
 import QiitaFeed
-import QiitaFeediOS
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -19,20 +18,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         URLSessionHTTPClient()
     }()
 
-    private lazy var store: QiitaStore = {
+    private lazy var store: QiitaStore & QiitaImageStore = {
         InMemoryQiitaStore()
     }()
 
-    private lazy var imageStore: QiitaImageStore = {
-        InMemoryQiitaImageStore()
-    }()
-
-    private lazy var remoteQiitaLoader: RemoteQiitaLoader = {
-        RemoteQiitaLoader(
-            client: httpClient,
-            baseURL: URL(string: "https://qiita.com/api/v2/items")!,
-            perPageItemsCount: 30)
-    }()
+    convenience init(httpClient: HTTPClient, store: QiitaStore & QiitaImageStore) {
+        self.init()
+        self.httpClient = httpClient
+        self.store = store
+    }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -45,12 +39,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func configureWindow() {
         let qiitaURL = URL(string: "https://qiita.com/api/v2/items")!
-        let remoteQiitaLoader = RemoteQiitaLoader(client: httpClient, baseURL: qiitaURL, perPageItemsCount: 30)
+        let perPageItemsCount = 30
+        let remoteQiitaLoader = RemoteQiitaLoader(client: httpClient, baseURL: qiitaURL, perPageItemsCount: perPageItemsCount)
         let remoteQiitaImageLoader = RemoteQiitaImageLoader(client: httpClient)
-//        let localQiitaLoader = LocalQiitaLoader(store: store, currentDate: Date.init)
-//        let localQiitaImageLoader = LocalQiitaImageLoader(store: imageStore, currentDate: Date.init)
+        let localQiitaLoader = LocalQiitaLoader(store: store, perPageItemsCount: perPageItemsCount,
+                                                currentDate: Date.init)
+        let localQiitaImageLoader = LocalQiitaImageLoader(store: store, currentDate: Date.init)
 
-        window?.rootViewController = QiitaListUIComposer.composeQiitaListViewController(listLoader: remoteQiitaLoader, imageLoader: remoteQiitaImageLoader)
+        window?.rootViewController = QiitaListUIComposer.composeQiitaListViewController(
+            listLoader: PaginationQiitaLoaderWithFallback(
+                primary: QiitaCacheDecorator(decoratee: remoteQiitaLoader,
+                                             cache: localQiitaLoader),
+                fallback: localQiitaLoader),
+            imageLoader: QiitaImageLoaderWithFallback(
+                primary: QiitaImageCacheDecorator(decoratee: remoteQiitaImageLoader,
+                                                  cache: localQiitaImageLoader),
+                fallback: localQiitaImageLoader))
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -19,7 +19,7 @@ struct QiitaListUIComposer {
 
         let viewModel = QiitaListViewModel(loader: MainQueueDispatchDecorator(decoratee: listLoader))
         viewModel.onLoad = adaptQiitaItemsTo(viewController,
-                                             imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader))
+                                             imageLoader: imageLoader)
         viewModel.onError = { [weak viewController] error in
             viewController?.setError(error)
         }

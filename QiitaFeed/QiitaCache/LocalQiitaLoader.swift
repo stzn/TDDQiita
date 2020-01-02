@@ -113,11 +113,11 @@ extension LocalQiitaLoader: PaginationQiitaLoader {
 }
 
 extension LocalQiitaLoader: QiitaCache {
-    func save(_ item: CachedQiitaItem, completion: @escaping SaveCompletion) {
+    public func save(_ item: CachedQiitaItem, completion: @escaping SaveCompletion) {
         store.save(item, completion: completion)
     }
 
-    func delete(completion: @escaping DeleteCompletion) {
+    public func delete(completion: @escaping DeleteCompletion) {
         store.delete(completion: completion)
     }
 }

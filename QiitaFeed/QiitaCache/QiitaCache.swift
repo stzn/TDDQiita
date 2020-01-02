@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol QiitaCache {
+public protocol QiitaCache {
     typealias SaveResult = Result<Void, Error>
     typealias SaveCompletion = (SaveResult) -> Void
 

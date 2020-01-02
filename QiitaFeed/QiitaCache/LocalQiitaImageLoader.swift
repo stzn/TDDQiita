@@ -10,8 +10,8 @@ import Foundation
 import QiitaFeature
 
 public final class LocalQiitaImageLoader {
-    let store: QiitaImageStore
-    let currentDate: () -> Date
+    private let store: QiitaImageStore
+    private let currentDate: () -> Date
     public init(store: QiitaImageStore,
          currentDate: @escaping () -> Date = Date.init) {
         self.store = store
@@ -35,10 +35,12 @@ extension LocalQiitaImageLoader: QiitaImageLoader {
         }
     }
 
-    @discardableResult
     public func load(url: URL, completion: @escaping Completion) -> QiitaImageLoaderTask {
         let task = LocalQiitaImageLoaderTask(completion)
-        store.get(for: url) { result in
+        store.get(for: url) { [weak self] result in
+            guard self != nil else {
+                return
+            }
             switch result {
             case .success(let .some(cached)):
                 task.complete(with: .success(cached.data))
