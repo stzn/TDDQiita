@@ -21,7 +21,7 @@ class LocalQiitaImageLoaderTests: XCTestCase {
         let (loader, store) = makeTestTarget()
         let url = anyURL
 
-        loader.load(url: url) { _ in }
+        _ = loader.load(url: url) { _ in }
 
         XCTAssertEqual(store.receivedMessages, [.get(url)])
     }
