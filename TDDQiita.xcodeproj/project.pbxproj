@@ -469,6 +469,7 @@
 		D6B1B45323AF163100429B47 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				D60CF6A423BE80AC00C4C779 /* HTTPClientStub.swift */,
 				D6B1B45423AF169200429B47 /* XCTestCase+.swift */,
 				D6B1B45623AF3CEE00429B47 /* UIControl+.swift */,
 				74E1EDE023B041C60013F717 /* TestDatas.swift */,
@@ -531,22 +532,13 @@
 			path = TDDQiita;
 			sourceTree = "<group>";
 		};
-		D6CD4E1A23B847A80052D8F2 /* QiitaListIntegration */ = {
-			isa = PBXGroup;
-			children = (
-				D6B1B45323AF163100429B47 /* Helpers */,
-				D6B1B44C23AF084E00429B47 /* QiitaListViewControllerTests.swift */,
-			);
-			path = QiitaListIntegration;
-			sourceTree = "<group>";
-		};
 		D6CD4E2923B848420052D8F2 /* TDDQiitaTests */ = {
 			isa = PBXGroup;
 			children = (
-				D6F2DEA623BD613600FB8E0C /* SceneDelegateTests.swift */,
-				D6CD4E1A23B847A80052D8F2 /* QiitaListIntegration */,
+				D6B1B45323AF163100429B47 /* Helpers */,
 				D60CF6A223BD651800C4C779 /* QiitaListAcceptanceTests.swift */,
-				D60CF6A423BE80AC00C4C779 /* HTTPClientStub.swift */,
+				D6B1B44C23AF084E00429B47 /* QiitaListViewControllerTests.swift */,
+				D6F2DEA623BD613600FB8E0C /* SceneDelegateTests.swift */,
 			);
 			path = TDDQiitaTests;
 			sourceTree = "<group>";
