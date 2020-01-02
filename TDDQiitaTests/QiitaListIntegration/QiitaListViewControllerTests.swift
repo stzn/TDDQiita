@@ -133,12 +133,12 @@ class QiitaListViewControllerTests: XCTestCase {
         let view0 = vc.simulateRenderedViewNotVisible(at: 0)
         loader.completeImageLoad(with: .success(anyImageData), at: 0)
         XCTAssertEqual(loader.canceledURLs, [item0.userImageURL])
-        XCTAssertEqual(view0?.userImage, vc.noUserImageData)
+        XCTAssertEqual(view0?.userImage, nil)
 
         let view1 = vc.simulateRenderedViewNotVisible(at: 1)
         loader.completeImageLoad(with: .success(anyImageData), at: 1)
         XCTAssertEqual(loader.canceledURLs, [item0.userImageURL, item1.userImageURL!])
-        XCTAssertEqual(view1?.userImage, vc.noUserImageData)
+        XCTAssertEqual(view1?.userImage, nil)
     }
 
     func testShowIndicatorWhenImageLoading() {
@@ -264,16 +264,16 @@ class QiitaListViewControllerTests: XCTestCase {
 
         let (vc, loader) = makeTestTarget()
         vc.loadViewIfNeeded()
-        XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 0)
+        XCTAssertEqual(vc.numberOfRows, 0)
 
         loader.complete(with: .success([item0]), at: 0)
         vc.simulateRenderedViewVisible(at: 0)
-        XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 1)
+        XCTAssertEqual(vc.numberOfRows, 1)
 
         vc.simulateLoadMoreAction()
         loader.complete(with: .success([item1]), at: 1)
         vc.simulateRenderedViewVisible(at: 1)
-        XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 2)
+        XCTAssertEqual(vc.numberOfRows, 2)
 
         assertThat(vc: vc, isRendering: [item0, item1])
     }
@@ -282,13 +282,13 @@ class QiitaListViewControllerTests: XCTestCase {
         let item = anyQiitaItem
         let (vc, loader) = makeTestTarget()
         vc.loadViewIfNeeded()
-        XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 0)
+        XCTAssertEqual(vc.numberOfRows, 0)
         loader.complete(with: .success([item]), at: 0)
-        XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 1)
+        XCTAssertEqual(vc.numberOfRows, 1)
 
         vc.simulateLoadMoreAction()
         loader.complete(with: .failure(anyNSError), at: 1)
-        XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 1)
+        XCTAssertEqual(vc.numberOfRows, 1)
 
         assertThat(vc: vc, hasViewConfiredFor: item, at: 0)
     }
@@ -300,21 +300,21 @@ class QiitaListViewControllerTests: XCTestCase {
 
          let (vc, loader) = makeTestTarget()
          vc.loadViewIfNeeded()
-         XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 0)
+         XCTAssertEqual(vc.numberOfRows, 0)
 
          loader.complete(with: .success([item0]), at: 0)
          vc.simulateRenderedViewVisible(at: 0)
-         XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 1)
+         XCTAssertEqual(vc.numberOfRows, 1)
 
          vc.simulateLoadMoreAction()
          loader.complete(with: .success([item1]), at: 1)
          vc.simulateRenderedViewVisible(at: 1)
-         XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 2)
+         XCTAssertEqual(vc.numberOfRows, 2)
 
          vc.simulateUserRefreshAction()
          loader.complete(with: .success([item2]), at: 0)
          vc.simulateRenderedViewVisible(at: 0)
-         XCTAssertEqual(vc.numberOfRows(inSection: vc.sectionForItems), 1)
+         XCTAssertEqual(vc.numberOfRows, 1)
 
          assertThat(vc: vc, isRendering: [item2])
      }

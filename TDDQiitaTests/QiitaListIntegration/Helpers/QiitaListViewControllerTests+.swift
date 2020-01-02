@@ -13,13 +13,13 @@ import QiitaFeature
 extension QiitaListViewControllerTests {
     func assertThat(vc: QiitaListViewController, isRendering items: [QiitaItem],
                     file: StaticString = #file, line: UInt = #line) {
-        let numberOfRows = vc.numberOfRows(inSection: vc.sectionForItems)
+        let numberOfRows = vc.numberOfRows
         guard numberOfRows == items.count else {
             XCTFail("\(items.count) is not equal to \(numberOfRows)", file: file, line: line)
             return
         }
         items.enumerated().forEach { index, item in
-            assertThat(vc: vc, hasViewConfiredFor: item, at: index)
+            assertThat(vc: vc, hasViewConfiredFor: item, at: index, file: file, line: line)
         }
     }
 

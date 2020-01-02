@@ -19,7 +19,6 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
 
     public var cellControllers: [QiitaListCellController] = []
     public var viewModel: QiitaListViewModel!
-    public static let noUserImage = UIImage(systemName: "nosign")!
     
     private var dataSource: UITableViewDiffableDataSource<Section, DisplayQiitaItem>!
     private(set) var refreshControl = UIRefreshControl()
@@ -118,16 +117,13 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
 
     @discardableResult
     private func cellForRowAt(indexPath: IndexPath, with item: DisplayQiitaItem) -> UITableViewCell? {
-        return cellControllers[indexPath.row].cell(for: tableView, at: indexPath) as! QiitaListCell
+        return cellControllers[indexPath.row].cell(in: tableView) as! QiitaListCell
     }
 }
 
 extension QiitaListViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if cellControllers.count > indexPath.row {
-            cellControllers[indexPath.row].cancel()
-            cacncel(at: indexPath)
-        }
+        cacncel(at: indexPath)
     }
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {

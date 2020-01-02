@@ -8,6 +8,7 @@
 
 import UIKit
 @testable import QiitaFeediOS
+@testable import TDDQiita
 
 extension QiitaListViewController {
     func simulateUserRefreshAction() {
@@ -60,8 +61,8 @@ extension QiitaListViewController {
         errorView?.message
     }
 
-    func numberOfRows(inSection section: Int) -> Int {
-        tableView.numberOfRows(inSection: section)
+    var numberOfRows: Int {
+        tableView.numberOfRows(inSection: sectionForItems)
     }
 
     var sectionForItems: Int { 0 }
@@ -73,6 +74,6 @@ extension QiitaListViewController {
     }
 
     var noUserImageData: Data {
-        QiitaListViewController.noUserImage.pngData()!
+        noUserImage.pngData()!
     }
 }

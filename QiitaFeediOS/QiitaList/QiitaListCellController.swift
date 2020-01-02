@@ -16,29 +16,28 @@ public final class QiitaListCellController {
         self.viewModel = viewModel
     }
 
-    private func binded(tableView: UITableView,
-                        at indexPath: IndexPath) -> QiitaListCell {
-        let cell: QiitaListCell = tableView.dequeueReusableCell()
+    private var cell: QiitaListCell?
 
-        viewModel.onLoad = { [weak cell] image in
-            cell?.setUserImage(from: image)
+    private func bind(in tableView: UITableView) -> QiitaListCell {
+        viewModel.onLoad = { [weak self] image in
+            self?.cell?.setUserImage(from: image)
         }
-        viewModel.onLoadingStateChange = { [weak cell] in
-            guard let cell = cell else {
+        viewModel.onLoadingStateChange = { [weak self] in
+            guard let cell = self?.cell else {
                 return
             }
             cell.isLoading
                 ? cell.stopImageLoading()
                 : cell.startImageLoading()
         }
-
-        cell.configure(viewModel.item)
+        cell = tableView.dequeueReusableCell()
+        cell?.configure(viewModel.item)
         loadImage()
-        return cell
+        return cell!
     }
 
-    func cell(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
-        return binded(tableView: tableView, at: indexPath)
+    func cell(in tableView: UITableView) -> UITableViewCell {
+        return bind(in: tableView)
     }
 
     private func loadImage() {
@@ -51,5 +50,6 @@ public final class QiitaListCellController {
 
     func cancel() {
         viewModel.cancel()
+        cell = nil
     }
 }

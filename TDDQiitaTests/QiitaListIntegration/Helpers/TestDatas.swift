@@ -13,6 +13,10 @@ var anyURL: URL {
     URL(string: "https://anyURL\(UUID().uuidString).com")!
 }
 
+var anyHTTPURLResponse: HTTPURLResponse {
+    HTTPURLResponse(url: anyURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+}
+
 var anyQiitaItem: QiitaItem {
     QiitaItem(
         id: UUID().uuidString,

@@ -35,13 +35,8 @@ public final class QiitaListImageViewModel<Image> {
             guard let self = self else {
                 return
             }
-
             defer {
                 self.onLoadingStateChange?()
-            }
-            guard self.task != nil else {
-                self.onLoad?(self.imageTransformer(nil))
-                return
             }
             let data = try? result.get()
             self.onLoad?(self.imageTransformer(data))

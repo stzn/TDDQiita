@@ -11,12 +11,15 @@ import UIKit
 import QiitaFeature
 import QiitaFeediOS
 
+let noUserImage = UIImage(systemName: "nosign")!
+
 struct QiitaListUIComposer {
     static func composeQiitaListViewController(listLoader: PaginationQiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
         let viewController = QiitaListViewController.instantiate()
 
         let viewModel = QiitaListViewModel(loader: MainQueueDispatchDecorator(decoratee: listLoader))
-        viewModel.onLoad = adaptQiitaItemsTo(viewController, imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader))
+        viewModel.onLoad = adaptQiitaItemsTo(viewController,
+                                             imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader))
         viewModel.onError = { [weak viewController] error in
             viewController?.setError(error)
         }
@@ -49,7 +52,7 @@ struct QiitaListUIComposer {
         if let data = data, let image = UIImage(data: data) {
             return image
         } else {
-            return QiitaListViewController.noUserImage
+            return noUserImage
         }
     }
 
