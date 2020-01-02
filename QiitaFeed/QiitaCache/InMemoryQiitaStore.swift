@@ -9,12 +9,16 @@
 import Foundation
 import QiitaFeature
 
-public final class InMemoryQiitaStore: QiitaStore, QiitaImageStore {
-    public init() {}
+public final class InMemoryQiitaStore {
+    private(set) var item: CachedQiitaItem?
+    private(set) var images: [URL: CachedQiitaImage]
+    public init(item: CachedQiitaItem? = nil, images: [URL: CachedQiitaImage] = [:]) {
+        self.item = item
+        self.images = images
+    }
+}
 
-    private(set) var item: CachedQiitaItem? = nil
-    private(set) var images: [URL: CachedQiitaImage] = [:]
-
+extension InMemoryQiitaStore: QiitaStore {
     public func get(completion: @escaping (QiitaStore.GetResult) -> Void) {
         completion(.success(item))
     }
@@ -28,9 +32,15 @@ public final class InMemoryQiitaStore: QiitaStore, QiitaImageStore {
         self.item = nil
         completion(.success(()))
     }
+}
 
+extension InMemoryQiitaStore: QiitaImageStore {
     public func get(for url: URL, completion: @escaping (QiitaImageStore.GetResult) -> Void) {
         completion(.success(images[url]))
+    }
+
+    public func getAll(completion: @escaping (QiitaImageStore.GetAllResult) -> Void) {
+        completion(.success(images.map { $0.value }))
     }
 
     public func save(for url: URL, image: CachedQiitaImage, completion: @escaping (QiitaImageStore.SaveResult) -> Void) {

@@ -40,9 +40,9 @@ class LocalQiitaImageLoaderTests: XCTestCase {
         let (loader, store) = makeTestTarget()
         let currentDate = Date()
         let data = anyData
-        let item = CachedQiitaImage(data: data,
-                                    timestamp: currentDate.minusQiitaCacheMaxAge().advanced(by: 1))
         let url = anyURL
+        let item = CachedQiitaImage(url: url, data: data,
+                                    timestamp: currentDate.minusQiitaCacheMaxAge().advanced(by: 1))
         expect(loader, expected: .success(data), for: url, when: {
             store.completeWith(result: .success(item), for: url)
         }, currentDate: { currentDate })
@@ -114,7 +114,7 @@ class LocalQiitaImageLoaderTests: XCTestCase {
     }
 
     private var anyCachedQiitaImage: CachedQiitaImage {
-        return CachedQiitaImage(data: anyData, timestamp: Date())
+        return CachedQiitaImage(url: anyURL, data: anyData, timestamp: Date())
     }
 }
 

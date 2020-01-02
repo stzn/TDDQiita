@@ -9,9 +9,11 @@
 import Foundation
 
 public struct CachedQiitaImage {
+    public let url: URL
     public let data: Data
     public let timestamp: Date
-    public init(data: Data, timestamp: Date) {
+    public init(url: URL, data: Data, timestamp: Date) {
+        self.url = url
         self.data = data
         self.timestamp = timestamp
     }

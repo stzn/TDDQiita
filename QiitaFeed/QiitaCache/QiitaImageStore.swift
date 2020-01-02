@@ -13,6 +13,10 @@ public protocol QiitaImageStore {
     typealias GetCompletion = (GetResult) -> Void
     func get(for url: URL, completion: @escaping GetCompletion)
 
+    typealias GetAllResult = Result<[CachedQiitaImage], Error>
+    typealias GetAllCompletion = (GetAllResult) -> Void
+    func getAll(completion: @escaping GetAllCompletion)
+
     typealias SaveResult = Result<Void, Error>
     typealias SaveCompletion = (SaveResult) -> Void
     func save(for url: URL, image: CachedQiitaImage, completion: @escaping SaveCompletion)

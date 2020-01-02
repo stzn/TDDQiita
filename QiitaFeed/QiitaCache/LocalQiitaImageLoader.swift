@@ -57,7 +57,7 @@ extension LocalQiitaImageLoader: QiitaImageLoader {
 extension LocalQiitaImageLoader: QiitaImageCache {
     public func save(for url: URL, data: Data, completion: @escaping SaveCompletion) {
         store.save(for: url,
-                   image: CachedQiitaImage(data: data, timestamp: Date()),
+                   image: CachedQiitaImage(url: url, data: data, timestamp: Date()),
                    completion: completion)
     }
 

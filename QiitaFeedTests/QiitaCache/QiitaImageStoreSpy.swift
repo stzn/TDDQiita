@@ -13,6 +13,7 @@ import QiitaFeature
 final class QiitaImageStoreSpy: QiitaImageStore {
     enum ReceivedMessage: Equatable {
         case get(URL)
+        case getAll
         case save(URL)
         case delete(URL)
     }
@@ -20,6 +21,7 @@ final class QiitaImageStoreSpy: QiitaImageStore {
     var receivedMessages: [ReceivedMessage] = []
 
     var receivedGetCompletions: [URL: GetCompletion] = [:]
+    var receivedGetAllCompletions: [GetAllCompletion] = []
     var receivedSaveCompletions: [URL: SaveCompletion] = [:]
     var receivedDeleteCompletions: [URL: DeleteCompletion] = [:]
 
@@ -30,6 +32,14 @@ final class QiitaImageStoreSpy: QiitaImageStore {
 
     func completeWith(result: GetResult, for url: URL) {
         receivedGetCompletions[url]!(result)
+    }
+
+    func getAll(completion: @escaping GetAllCompletion) {
+        receivedGetAllCompletions.append(completion)
+    }
+
+    func completeWith(result: GetAllResult, at index: Int) {
+        receivedGetAllCompletions[index](result)
     }
 
     func save(for url: URL, image: CachedQiitaImage, completion: @escaping SaveCompletion) {
