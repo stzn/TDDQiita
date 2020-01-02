@@ -79,7 +79,7 @@ class CacheQiitaImageLoaderTests: XCTestCase {
     }
 
     private func deleteExpect(_ loader: LocalQiitaImageLoader,
-                              expected: LocalQiitaImageLoader.SaveResult,
+                              expected: LocalQiitaImageLoader.DeleteResult,
                               for url: URL,
                               when action: () -> Void,
                               file: StaticString = #file, line: UInt = #line) {
