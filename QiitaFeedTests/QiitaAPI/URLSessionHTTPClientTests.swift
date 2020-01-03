@@ -70,13 +70,16 @@ class URLSessionHTTPClientTests: XCTestCase {
         let error = anyNSError
         let response = anyHTTPURLResponse
 
-        let testCases: [UInt: (result: URLSessionHTTPClient.Result, data: Data?, response: HTTPURLResponse?, error: Error?)] = [
-            #line: (.success((data, response)), data, response, nil),
-            #line: (.failure(.unknown(error)), anyData, response, error),
-            #line: (.failure(.unknown(error)), nil, nil, error)
+        // swiftlint:disable:next nesting
+        typealias URLSessionResponse = (data: Data?, response: HTTPURLResponse?, error: Error?)
+        let testCases: [UInt: (result: URLSessionHTTPClient.Result, response: URLSessionResponse)] = [
+            #line: (.success((data, response)), (data, response, nil)),
+            #line: (.failure(.unknown(error)), (anyData, response, error)),
+            #line: (.failure(.unknown(error)), (nil, nil, error))
         ]
         for (line, testCase) in testCases {
-            expect(testCase.result, data: testCase.data, response: testCase.response, error: testCase.error, line: line)
+            let response = testCase.response
+            expect(testCase.result, data: response.data, response: response.response, error: response.error, line: line)
         }
     }
 
@@ -87,7 +90,7 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
 
     private func expect(_ expected: URLSessionHTTPClient.Result,
-                        data: Data?, response: HTTPURLResponse?, error:Error?,
+                        data: Data?, response: HTTPURLResponse?, error: Error?,
                         file: StaticString = #file,
                         line: UInt = #line) {
         URLProtocolStub.stub(data: data, response: response, error: error)
@@ -103,9 +106,9 @@ class URLSessionHTTPClientTests: XCTestCase {
 
         switch (received, expected) {
         case (.success(let (received, _)), .success(let (expected, _))):
-            XCTAssertEqual(received, expected, file: file, line:line)
+            XCTAssertEqual(received, expected, file: file, line: line)
         case (.failure(let received), .failure(let expected)):
-            XCTAssertEqual(received as NSError, expected as NSError, file: file, line:line)
+            XCTAssertEqual(received as NSError, expected as NSError, file: file, line: line)
         default:
             XCTFail("expect \(expected), but got \(received!)")
         }
@@ -115,6 +118,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         private static var stub: Stub?
         private static var requestObserver: ((URLRequest) -> Void)?
 
+        // swiftlint:disable:next nesting
         private struct Stub {
             let data: Data?
             let response: URLResponse?
@@ -124,7 +128,7 @@ class URLSessionHTTPClientTests: XCTestCase {
             stub = Stub(data: data, response: response, error: error)
         }
 
-        static func observeRequests(observer: @escaping (URLRequest)-> Void) {
+        static func observeRequests(observer: @escaping (URLRequest) -> Void) {
             requestObserver = observer
         }
 

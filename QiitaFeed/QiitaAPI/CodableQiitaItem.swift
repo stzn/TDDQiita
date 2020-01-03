@@ -9,10 +9,11 @@
 import Foundation
 
 struct CodableQiitaItem: Codable {
+    // swiftlint:disable:next identifier_name
     init(id: String, likesCount: Int,
-                reactionsCount: Int, commentsCount: Int,
-                title: String, createdAt: String, updatedAt: String,
-                url: URL, tags: [Tag] , user: User?) {
+         reactionsCount: Int, commentsCount: Int,
+         title: String, createdAt: String, updatedAt: String,
+         url: URL, tags: [Tag], user: User?) {
         self.id = id
         self.likesCount = likesCount
         self.reactionsCount = reactionsCount
@@ -25,7 +26,7 @@ struct CodableQiitaItem: Codable {
         self.user = user
     }
 
-    static func ==(lhs: CodableQiitaItem, rhs: CodableQiitaItem) -> Bool {
+    static func == (lhs: CodableQiitaItem, rhs: CodableQiitaItem) -> Bool {
         return lhs.id == rhs.id
             && lhs.likesCount == rhs.likesCount
             && lhs.reactionsCount == rhs.reactionsCount
@@ -38,6 +39,7 @@ struct CodableQiitaItem: Codable {
             && lhs.user == rhs.user
     }
 
+    // swiftlint:disable:next identifier_name
     let id: String
     let likesCount: Int
     let reactionsCount: Int
@@ -54,7 +56,7 @@ struct CodableQiitaItem: Codable {
             self.name = name
         }
 
-        static func ==(lhs: CodableQiitaItem.Tag, rhs: CodableQiitaItem.Tag) -> Bool {
+        static func == (lhs: CodableQiitaItem.Tag, rhs: CodableQiitaItem.Tag) -> Bool {
             return lhs.name == rhs.name
         }
 
@@ -63,12 +65,12 @@ struct CodableQiitaItem: Codable {
 
     struct User: Codable, Equatable, Hashable {
         init(githubLoginName: String?,
-                    profileImageUrl: String?) {
+             profileImageUrl: String?) {
             self.githubLoginName = githubLoginName
             self.profileImageUrl = profileImageUrl
         }
 
-        static func ==(lhs: CodableQiitaItem.User, rhs: CodableQiitaItem.User) -> Bool {
+        static func == (lhs: CodableQiitaItem.User, rhs: CodableQiitaItem.User) -> Bool {
             return lhs.githubLoginName == rhs.githubLoginName
                 && lhs.profileImageUrl == rhs.profileImageUrl
         }
@@ -77,4 +79,3 @@ struct CodableQiitaItem: Codable {
         let profileImageUrl: String?
     }
 }
-

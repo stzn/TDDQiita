@@ -17,8 +17,8 @@ public final class QiitaListImageViewModel<Image> {
     private let loader: QiitaImageLoader
     private let imageTransformer: (Data?) -> Image
     public init(item: DisplayQiitaItem,
-         loader: QiitaImageLoader,
-         imageTransformer: @escaping (Data?) -> Image) {
+                loader: QiitaImageLoader,
+                imageTransformer: @escaping (Data?) -> Image) {
         self.item = item
         self.loader = loader
         self.imageTransformer = imageTransformer

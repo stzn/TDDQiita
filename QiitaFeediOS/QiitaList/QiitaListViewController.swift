@@ -13,13 +13,13 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
     @IBOutlet private(set) weak var indicator: UIActivityIndicatorView!
     @IBOutlet private(set) weak var errorView: ErrorView!
 
-    enum Section{
+    enum Section {
         case main
     }
 
     public var cellControllers: [QiitaListCellController] = []
     public var viewModel: QiitaListViewModel!
-    
+
     private var dataSource: UITableViewDiffableDataSource<Section, DisplayQiitaItem>!
     private(set) var refreshControl = UIRefreshControl()
     private var isLoading: Bool {
@@ -69,7 +69,8 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
     }
 
     private func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<Section, DisplayQiitaItem>(tableView: tableView) { [weak self] _, indexPath, item in
+        dataSource = UITableViewDiffableDataSource<Section, DisplayQiitaItem>(
+        tableView: tableView) { [weak self] _, indexPath, item in
             return self?.cellForRowAt(indexPath: indexPath, with: item)
         }
         clearDataSource()
@@ -117,12 +118,15 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
 
     @discardableResult
     private func cellForRowAt(indexPath: IndexPath, with item: DisplayQiitaItem) -> UITableViewCell? {
+        // swiftlint:disable:next force_cast
         return cellControllers[indexPath.row].cell(in: tableView) as! QiitaListCell
     }
 }
 
 extension QiitaListViewController: UITableViewDelegate {
-    public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView,
+                          didEndDisplaying cell: UITableViewCell,
+                          forRowAt indexPath: IndexPath) {
         cacncel(at: indexPath)
     }
 

@@ -13,7 +13,7 @@ public struct DisplayQiitaItem: Hashable {
     let commentsCount: String
     let updatedAt: String
     let userImageURL: URL?
-    
+
     public init(
         title: String,
         userName: String,

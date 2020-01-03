@@ -21,4 +21,3 @@ public protocol QiitaStore {
     typealias DeleteCompletion = (DeleteResult) -> Void
     func delete(completion: @escaping DeleteCompletion)
 }
-

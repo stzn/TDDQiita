@@ -10,7 +10,7 @@ import XCTest
 @testable import QiitaFeed
 
 class LinkTests: XCTestCase {
-    var link:Link!
+    var link: Link!
 
     override func setUp() {
         super.setUp()
@@ -44,7 +44,7 @@ class LinkTests: XCTestCase {
 }
 
 class LinkHeaderTests: XCTestCase {
-    var link:Link!
+    var link: Link!
 
     override func setUp() {
         super.setUp()
@@ -69,7 +69,7 @@ class LinkHeaderTests: XCTestCase {
     func testResponseLinks() {
         let url = URL(string: "http://test.com/")!
         let headers = [
-            "Link": "</style.css>; rel=\"stylesheet\"; type=\"text/css\"",
+            "Link": "</style.css>; rel=\"stylesheet\"; type=\"text/css\""
         ]
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: headers)!
         let link = Link(uri: "http://test.com/style.css", parameters: ["rel": "stylesheet", "type": "text/css"])
@@ -80,7 +80,8 @@ class LinkHeaderTests: XCTestCase {
     func testResponseFindLinkParameters() {
         let url = URL(string: "http://test.com/")!
         let headers = [
-            "Link": "</style.css>; rel=\"stylesheet\"; type=\"text/css\", </style.css>; rel=\"stylesheet\"; type=\"text/css\"",
+            // swiftlint:disable:next line_length
+            "Link": "</style.css>; rel=\"stylesheet\"; type=\"text/css\", </style.css>; rel=\"stylesheet\"; type=\"text/css\""
         ]
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: headers)!
         let link = Link(uri: "http://test.com/style.css", parameters: ["rel": "stylesheet", "type": "text/css"])
@@ -92,7 +93,7 @@ class LinkHeaderTests: XCTestCase {
     func testResponseFindNoLinkParameters() {
         let url = URL(string: "http://test.com/")!
         let headers = [
-            "Link": "random; text",
+            "Link": "random; text"
         ]
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: headers)!
         let foundLink = response.findLink(["rel": "stylesheet"])
@@ -103,7 +104,7 @@ class LinkHeaderTests: XCTestCase {
     func testResponseNoLinkParameters() {
         let url = URL(string: "http://test.com/")!
         let headers = [
-            "Link2": "random text",
+            "Link2": "random text"
         ]
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: headers)!
         let foundLink = response.findLink(["rel": "stylesheet"])
@@ -114,7 +115,7 @@ class LinkHeaderTests: XCTestCase {
     func testResponseNotALinkParameters() {
         let url = URL(string: "http://test.com/")!
         let headers = [
-            "Link": "random text",
+            "Link": "random text"
         ]
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: headers)!
         let foundLink = response.findLink(["rel": "stylesheet"])
@@ -125,7 +126,8 @@ class LinkHeaderTests: XCTestCase {
     func testResponseFindAnotherLinkParameters() {
         let url = URL(string: "http://test.com/")!
         let headers = [
-            "Link": "</style.css>; rel=\"stylesheet\"; type=\"text/css\", </style.css>; rel=\"stylesheet\"; type=\"text/css\"",
+            // swiftlint:disable:next line_length
+            "Link": "</style.css>; rel=\"stylesheet\"; type=\"text/css\", </style.css>; rel=\"stylesheet\"; type=\"text/css\""
         ]
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: headers)!
         let foundLink = response.findLink(["rel": "someImage"])
@@ -136,7 +138,8 @@ class LinkHeaderTests: XCTestCase {
     func testResponseFindLinkRelation() {
         let url = URL(string: "http://test.com/")!
         let headers = [
-            "Link": "</style.css>; rel=\"stylesheet\"; type=\"text/css\", </style.css>; rel=\"stylesheet\"; type=\"text/css\"",
+            // swiftlint:disable:next line_length
+            "Link": "</style.css>; rel=\"stylesheet\"; type=\"text/css\", </style.css>; rel=\"stylesheet\"; type=\"text/css\""
         ]
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: headers)!
         let link = Link(uri: "http://test.com/style.css", parameters: ["rel": "stylesheet", "type": "text/css"])
@@ -146,9 +149,8 @@ class LinkHeaderTests: XCTestCase {
     }
 }
 
-
 class LinkWihoutParamentersTests: XCTestCase {
-    var link:Link!
+    var link: Link!
 
     override func setUp() {
         super.setUp()
@@ -164,9 +166,8 @@ class LinkWihoutParamentersTests: XCTestCase {
     }
 }
 
-
 class EmptyHeaderLinkTests: XCTestCase {
-    var link:Link!
+    var link: Link!
 
     override func setUp() {
         super.setUp()

@@ -31,7 +31,8 @@ public final class LocalQiitaLoader {
                 return
             }
             switch result {
-            case .success(let .some(cached)) where QiitaCachePolicy.validate(cached.timestamp, against: self.currentDate()):
+            case .success(let .some(cached))
+                where QiitaCachePolicy.validate(cached.timestamp, against: self.currentDate()):
                 break
             case .failure, .success:
                 self.store.delete { _ in }

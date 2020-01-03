@@ -13,7 +13,7 @@ public final class LocalQiitaImageLoader {
     private let store: QiitaImageStore
     private let currentDate: () -> Date
     public init(store: QiitaImageStore,
-         currentDate: @escaping () -> Date = Date.init) {
+                currentDate: @escaping () -> Date = Date.init) {
         self.store = store
         self.currentDate = currentDate
     }

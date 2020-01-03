@@ -13,7 +13,7 @@ public final class QiitaListViewModel {
     public var onRefreshStateChange: (() -> Void)?
     public var onLoad: (([QiitaItem]) -> Void)?
     public var onError: ((Error) -> Void)?
-    
+
     private let loader: PaginationQiitaLoader
     public init(loader: PaginationQiitaLoader) {
         self.loader = loader

@@ -14,7 +14,8 @@ import QiitaFeediOS
 let noUserImage = UIImage(systemName: "nosign")!
 
 struct QiitaListUIComposer {
-    static func composeQiitaListViewController(listLoader: PaginationQiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
+    static func composeQiitaListViewController(
+        listLoader: PaginationQiitaLoader, imageLoader: QiitaImageLoader) -> QiitaListViewController {
         let viewController = QiitaListViewController.instantiate()
 
         let viewModel = QiitaListViewModel(loader: MainQueueDispatchDecorator(decoratee: listLoader))

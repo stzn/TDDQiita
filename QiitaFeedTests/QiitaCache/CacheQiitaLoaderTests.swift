@@ -40,7 +40,6 @@ class CacheQiitaLoaderTests: XCTestCase {
         })
     }
 
-
     // MARK: Helpers
     private func makeTestTarget(
         currentDate: @escaping () -> Date = Date.init,

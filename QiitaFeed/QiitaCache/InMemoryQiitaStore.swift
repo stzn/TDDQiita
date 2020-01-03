@@ -43,7 +43,8 @@ extension InMemoryQiitaStore: QiitaImageStore {
         completion(.success(images.map { $0.value }))
     }
 
-    public func save(for url: URL, image: CachedQiitaImage, completion: @escaping (QiitaImageStore.SaveResult) -> Void) {
+    public func save(for url: URL, image: CachedQiitaImage,
+                     completion: @escaping (QiitaImageStore.SaveResult) -> Void) {
         images[url] = image
         completion(.success(()))
     }

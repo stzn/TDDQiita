@@ -7,10 +7,11 @@
 //
 
 public struct QiitaItem: Hashable {
+    // swiftlint:disable:next identifier_name
     public init(id: String, likesCount: Int,
                 reactionsCount: Int, commentsCount: Int,
                 title: String, createdAt: Date, updatedAt: Date,
-                url: URL, tags: [Tag] , user: User?) {
+                url: URL, tags: [Tag], user: User?) {
         self.id = id
         self.likesCount = likesCount
         self.reactionsCount = reactionsCount
@@ -22,8 +23,8 @@ public struct QiitaItem: Hashable {
         self.tags = tags
         self.user = user
     }
-    
-    public static func ==(lhs: QiitaItem, rhs: QiitaItem) -> Bool {
+
+    public static func == (lhs: QiitaItem, rhs: QiitaItem) -> Bool {
         return lhs.id == rhs.id
             && lhs.likesCount == rhs.likesCount
             && lhs.reactionsCount == rhs.reactionsCount
@@ -35,7 +36,8 @@ public struct QiitaItem: Hashable {
             && lhs.tags == rhs.tags
             && lhs.user == rhs.user
     }
-    
+
+    // swiftlint:disable:next identifier_name
     public let id: String
     public let likesCount: Int
     public let reactionsCount: Int
@@ -46,29 +48,29 @@ public struct QiitaItem: Hashable {
     public let url: URL
     public let tags: [Tag]
     public let user: User?
-    
+
     public var userImageURL: URL? {
         user?.userImageURL
     }
-    
+
     public struct Tag: Hashable {
         public init(name: String) {
             self.name = name
         }
-        
+
         public let name: String
     }
-    
+
     public struct User: Hashable {
         public init(githubLoginName: String?,
                     profileImageUrl: String?) {
             self.githubLoginName = githubLoginName
             self.profileImageUrl = profileImageUrl
         }
-        
+
         public let githubLoginName: String?
         public let profileImageUrl: String?
-        
+
         public var userImageURL: URL? {
             URL(string: profileImageUrl ?? "")
         }

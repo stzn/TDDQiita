@@ -49,7 +49,7 @@ class ValidateQiitaCacheTests: XCTestCase {
         -> (LocalQiitaLoader, QiitaStoreSpy) {
             let store = QiitaStoreSpy()
             let loader = LocalQiitaLoader(store: store, perPageItemsCount: 1,
-                                                    currentDate: currentDate)
+                                          currentDate: currentDate)
             trackForMemoryLeaks(loader, file: file, line: line)
             trackForMemoryLeaks(store, file: file, line: line)
             return (loader, store)

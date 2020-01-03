@@ -49,4 +49,3 @@ final class QiitaStoreSpy: QiitaStore {
         receivedDeleteCompletions[index](result)
     }
 }
-

@@ -104,13 +104,13 @@ public final class RemoteQiitaLoader: PaginationQiitaLoader {
         }
         component.queryItems = makeQueryItem(from: [
             QueryKey.pageNumber: 1,
-            QueryKey.perPageItemsCount: perPageItemsCount,
+            QueryKey.perPageItemsCount: perPageItemsCount
         ])
         return component.url
     }
 
-    private func makeQueryItem(from parameter: [String:Any]) -> [URLQueryItem] {
-        var items :[URLQueryItem] = []
+    private func makeQueryItem(from parameter: [String: Any]) -> [URLQueryItem] {
+        var items: [URLQueryItem] = []
         parameter.forEach { key, value in
             let string = String(describing: value)
             guard !string.isEmpty else { return }
@@ -120,4 +120,3 @@ public final class RemoteQiitaLoader: PaginationQiitaLoader {
         return items
     }
 }
-

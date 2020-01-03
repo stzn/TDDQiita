@@ -15,4 +15,3 @@ public protocol PaginationQiitaLoader {
     func loadNext(completion: @escaping Completion)
     func refresh(completion: @escaping Completion)
 }
-

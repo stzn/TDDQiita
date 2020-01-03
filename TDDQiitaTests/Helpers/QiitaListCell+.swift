@@ -38,4 +38,3 @@ extension QiitaListCell {
         userImageView.image?.pngData()
     }
 }
-

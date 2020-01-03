@@ -11,21 +11,21 @@ import QiitaFeature
 @testable import QiitaFeediOS
 
 extension QiitaListViewControllerTests {
-    func assertThat(vc: QiitaListViewController, isRendering items: [QiitaItem],
+    func assertThat(viewController: QiitaListViewController, isRendering items: [QiitaItem],
                     file: StaticString = #file, line: UInt = #line) {
-        let numberOfRows = vc.numberOfRows
+        let numberOfRows = viewController.numberOfRows
         guard numberOfRows == items.count else {
             XCTFail("\(items.count) is not equal to \(numberOfRows)", file: file, line: line)
             return
         }
         items.enumerated().forEach { index, item in
-            assertThat(vc: vc, hasViewConfiredFor: item, at: index, file: file, line: line)
+            assertThat(viewController: viewController, hasViewConfiredFor: item, at: index, file: file, line: line)
         }
     }
 
-    func assertThat(vc: QiitaListViewController, hasViewConfiredFor item: QiitaItem, at index: Int,
+    func assertThat(viewController: QiitaListViewController, hasViewConfiredFor item: QiitaItem, at index: Int,
                     file: StaticString = #file, line: UInt = #line) {
-        let view = vc.renderedView(at: index)
+        let view = viewController.renderedView(at: index)
         guard let cell = view else {
             XCTFail("Expected \(QiitaListCell.self), but \(String(describing: view))")
             return

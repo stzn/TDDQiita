@@ -57,9 +57,9 @@ class LocalQiitaLoaderTests: XCTestCase {
             store.completeWith(.success(item))
         }, currentDate: { currentDate })
         expectLoadNext(loader, expected: .success([item.items[1]]),
-               when: {}, currentDate: { currentDate })
+                       when: {}, currentDate: { currentDate })
         expectLoadNext(loader, expected: .success([item.items[2]]),
-               when: {}, currentDate: { currentDate })
+                       when: {}, currentDate: { currentDate })
     }
 
     func testLoadNextWithInvalidNoItemGot() {
@@ -101,7 +101,6 @@ class LocalQiitaLoaderTests: XCTestCase {
         }, currentDate: { currentDate })
     }
 
-
     // MARK: Helpers
     private func makeTestTarget(currentDate: @escaping () -> Date = Date.init,
                                 file: StaticString = #file, line: UInt = #line)
@@ -115,10 +114,10 @@ class LocalQiitaLoaderTests: XCTestCase {
     }
 
     private func expectLoadNext(_ loader: LocalQiitaLoader,
-                        expected: QiitaLoader.Result,
-                        when action: () -> Void,
-                        currentDate: @escaping () -> Date = Date.init,
-                        file: StaticString = #file, line: UInt = #line) {
+                                expected: QiitaLoader.Result,
+                                when action: () -> Void,
+                                currentDate: @escaping () -> Date = Date.init,
+                                file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "wait for load next")
         loader.loadNext { [weak self] received in
             self?.assertResult(

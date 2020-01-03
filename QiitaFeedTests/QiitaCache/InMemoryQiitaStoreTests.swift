@@ -62,6 +62,7 @@ class InMemoryQiitaStoreTests: XCTestCase {
     private func get(store: InMemoryQiitaStore) -> CachedQiitaItem? {
         var received: CachedQiitaItem?
         store.get { item in
+            // swiftlint:disable:next force_try
             received = try! item.get()
         }
         return received

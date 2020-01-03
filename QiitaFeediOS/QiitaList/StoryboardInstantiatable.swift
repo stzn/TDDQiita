@@ -20,4 +20,3 @@ extension StoryboardInstantiatable where Self: UIViewController {
             .instantiateViewController(identifier: viewControllerName) as Self
     }
 }
-

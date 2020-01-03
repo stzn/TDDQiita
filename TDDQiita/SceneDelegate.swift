@@ -38,15 +38,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.store = store
     }
 
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let _ = (scene as? UIWindowScene) else { return }
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
+               options connectionOptions: UIScene.ConnectionOptions) {
+        guard (scene as? UIWindowScene) != nil else { return }
 
         configureWindow()
     }
 
     func configureWindow() {
         let qiitaURL = URL(string: "https://qiita.com/api/v2/items")!
-        let remoteQiitaLoader = RemoteQiitaLoader(client: httpClient, baseURL: qiitaURL, perPageItemsCount: perPageItemsCount)
+        let remoteQiitaLoader = RemoteQiitaLoader(client: httpClient,
+                                                  baseURL: qiitaURL,
+                                                  perPageItemsCount: perPageItemsCount)
         let remoteQiitaImageLoader = RemoteQiitaImageLoader(client: httpClient)
 
         window?.rootViewController = QiitaListUIComposer.composeQiitaListViewController(
@@ -65,4 +68,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         localQiitaImageLoader.validateCache()
     }
 }
-

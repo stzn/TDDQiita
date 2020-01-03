@@ -57,6 +57,7 @@ class RemoteQiitaImageLoaderTests: XCTestCase {
             case (.success(let lhs), .success(let rhs)):
                 XCTAssertEqual(lhs, rhs, file: file, line: line)
             case (.failure(let lhs), .failure(let rhs)):
+                // swiftlint:disable:next force_cast
                 XCTAssertEqual(lhs as! HTTPClientError, rhs as! HTTPClientError, file: file, line: line)
             default:
                 XCTFail("\(expected) want but got \(received)")

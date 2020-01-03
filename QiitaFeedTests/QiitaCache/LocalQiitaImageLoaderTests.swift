@@ -117,4 +117,3 @@ class LocalQiitaImageLoaderTests: XCTestCase {
         return CachedQiitaImage(url: anyURL, data: anyData, timestamp: Date())
     }
 }
-

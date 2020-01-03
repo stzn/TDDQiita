@@ -73,6 +73,7 @@ class QiitaListAcceptanceTests: XCTestCase {
         scene.window = UIWindow()
         scene.configureWindow()
 
+        // swiftlint:disable:next force_cast
         return scene.window?.rootViewController as! QiitaListViewController
     }
 
@@ -90,8 +91,8 @@ class QiitaListAcceptanceTests: XCTestCase {
     }
 
     private func makeCodableQiitaItemData() -> Data {
-        try! JSONEncoder().encode(
-            [anyCodableQiitaItem, anyCodableQiitaItem])
+        // swiftlint:disable:next force_try
+        try! JSONEncoder().encode([anyCodableQiitaItem, anyCodableQiitaItem])
     }
 
     private var imageData: Data {

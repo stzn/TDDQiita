@@ -199,11 +199,12 @@ class RemoteQiitaLoaderTests: XCTestCase {
     }
 
     private func encode(_ items: [CodableQiitaItem]) -> Data {
+        // swiftlint:disable:next force_try
         try! JSONEncoder().encode(items)
     }
 
     private func converToCodableItem(from item: QiitaItem) -> CodableQiitaItem {
-        var user: CodableQiitaItem.User? = nil
+        var user: CodableQiitaItem.User?
         if let itemUser = item.user {
             user = CodableQiitaItem.User(
                 githubLoginName: itemUser.githubLoginName, profileImageUrl: itemUser.profileImageUrl)

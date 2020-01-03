@@ -32,4 +32,3 @@ final class HTTPClientStub: HTTPClient {
         HTTPClientStub { _ in .failure(.unknown(anyNSError)) }
     }
 }
-
