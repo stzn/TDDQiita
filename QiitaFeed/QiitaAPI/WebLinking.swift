@@ -109,7 +109,7 @@ extension HTTPURLResponse {
     }
 }
 
-/// MARK: Private methods (used by link header conversion)
+// MARK: Private methods (used by link header conversion)
 /// Merge two dictionaries together
 func +<K, V>(lhs: [K: V], rhs: [K: V]) -> [K: V] {
     var dictionary = [K: V]()
