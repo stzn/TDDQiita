@@ -52,6 +52,29 @@ extension LocalQiitaImageLoader: QiitaImageLoader {
         }
         return task
     }
+
+    public func validateCache() {
+        store.getAll { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            switch result {
+            case .success(let images):
+                self.validateAll(images: images)
+            case .failure:
+                break
+            }
+        }
+    }
+
+    private func validateAll(images: [CachedQiitaImage]) {
+        let current = currentDate()
+        images.forEach { image in
+            if !QiitaCachePolicy.validate(image.timestamp, against: current) {
+                store.delete(for: image.url) { _ in }
+            }
+        }
+    }
 }
 
 extension LocalQiitaImageLoader: QiitaImageCache {

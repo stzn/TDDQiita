@@ -35,10 +35,11 @@ final class QiitaImageStoreSpy: QiitaImageStore {
     }
 
     func getAll(completion: @escaping GetAllCompletion) {
+        receivedMessages.append(.getAll)
         receivedGetAllCompletions.append(completion)
     }
 
-    func completeWith(result: GetAllResult, at index: Int) {
+    func completeWith(result: GetAllResult, at index: Int = 0) {
         receivedGetAllCompletions[index](result)
     }
 

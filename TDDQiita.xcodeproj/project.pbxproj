@@ -28,6 +28,7 @@
 		D60CF6AF23BE883F00C4C779 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CF6AE23BE883F00C4C779 /* Date+.swift */; };
 		D60CF6B123BEB0D200C4C779 /* LocalQiitaImageLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CF6B023BEB0D100C4C779 /* LocalQiitaImageLoaderTests.swift */; };
 		D60CF6B323BEB18500C4C779 /* CacheQiitaLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CF6B223BEB18500C4C779 /* CacheQiitaLoaderTests.swift */; };
+		D60CF6B523BEB3B100C4C779 /* ValidateQiitaImageCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CF6B423BEB3B100C4C779 /* ValidateQiitaImageCacheTests.swift */; };
 		D62D174F23A5CDD0006B1385 /* XCTestCase+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62D174E23A5CDD0006B1385 /* XCTestCase+.swift */; };
 		D62D175523A5F4AF006B1385 /* RemoteQiitaImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62D175423A5F4AF006B1385 /* RemoteQiitaImageLoader.swift */; };
 		D659DEB623A5A52100BE2FCD /* QiitaFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D659DEAD23A5A52100BE2FCD /* QiitaFeed.framework */; };
@@ -197,6 +198,7 @@
 		D60CF6AE23BE883F00C4C779 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		D60CF6B023BEB0D100C4C779 /* LocalQiitaImageLoaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalQiitaImageLoaderTests.swift; sourceTree = "<group>"; };
 		D60CF6B223BEB18500C4C779 /* CacheQiitaLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheQiitaLoaderTests.swift; sourceTree = "<group>"; };
+		D60CF6B423BEB3B100C4C779 /* ValidateQiitaImageCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateQiitaImageCacheTests.swift; sourceTree = "<group>"; };
 		D62D174E23A5CDD0006B1385 /* XCTestCase+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+.swift"; sourceTree = "<group>"; };
 		D62D175123A5F360006B1385 /* QiitaLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiitaLoader.swift; sourceTree = "<group>"; };
 		D62D175423A5F4AF006B1385 /* RemoteQiitaImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteQiitaImageLoader.swift; sourceTree = "<group>"; };
@@ -357,14 +359,15 @@
 		D62D175323A5F430006B1385 /* QiitaCache */ = {
 			isa = PBXGroup;
 			children = (
-				D60CF6B023BEB0D100C4C779 /* LocalQiitaImageLoaderTests.swift */,
 				D6B1B41F23ADBFBA00429B47 /* CacheQiitaImageLoaderTests.swift */,
+				D60CF6B223BEB18500C4C779 /* CacheQiitaLoaderTests.swift */,
 				74F7B9BC23A9D06900D01296 /* InMemoryQiitaStoreTests.swift */,
+				D60CF6B023BEB0D100C4C779 /* LocalQiitaImageLoaderTests.swift */,
 				D6F2DE9E23BC21D900FB8E0C /* LocalQiitaLoaderTests.swift */,
 				746271E523AC4FF80096FEF3 /* QiitaImageStoreSpy.swift */,
 				74F7B9B623A9B1AD00D01296 /* QiitaStoreSpy.swift */,
 				D6B1B41723ADB2F000429B47 /* ValidateQiitaCacheTests.swift */,
-				D60CF6B223BEB18500C4C779 /* CacheQiitaLoaderTests.swift */,
+				D60CF6B423BEB3B100C4C779 /* ValidateQiitaImageCacheTests.swift */,
 			);
 			path = QiitaCache;
 			sourceTree = "<group>";
@@ -864,6 +867,7 @@
 				74F7B9BD23A9D06900D01296 /* InMemoryQiitaStoreTests.swift in Sources */,
 				D67199AB23A5C04700BF1B45 /* TestDatas.swift in Sources */,
 				D62D174F23A5CDD0006B1385 /* XCTestCase+.swift in Sources */,
+				D60CF6B523BEB3B100C4C779 /* ValidateQiitaImageCacheTests.swift in Sources */,
 				D6B1B41823ADB2F000429B47 /* ValidateQiitaCacheTests.swift in Sources */,
 				D67199A923A5A75200BF1B45 /* URLSessionHTTPClientTests.swift in Sources */,
 				D67199AD23A5C45900BF1B45 /* RemoteQiitaImageLoaderTests.swift in Sources */,
