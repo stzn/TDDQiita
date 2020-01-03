@@ -50,8 +50,7 @@ class QiitaListAcceptanceTests: XCTestCase {
 
     func testValidateCacheExpiredCacheWhenEnterBackground() {
         let store = InMemoryQiitaStore.withExpiredCache
-        let scene = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
-        scene.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
+        enterBackground(with: store)
 
         XCTAssertNil(store.item)
         XCTAssertTrue(store.images.isEmpty)
@@ -59,8 +58,7 @@ class QiitaListAcceptanceTests: XCTestCase {
 
     func testValidateCacheNonExpiredCacheWhenEnterBackground() {
         let store = InMemoryQiitaStore.withNonExpiredCache
-        let scene = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
-        scene.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
+        enterBackground(with: store)
 
         XCTAssertNotNil(store.item)
         XCTAssertFalse(store.images.isEmpty)
@@ -76,6 +74,11 @@ class QiitaListAcceptanceTests: XCTestCase {
         scene.configureWindow()
 
         return scene.window?.rootViewController as! QiitaListViewController
+    }
+
+    private func enterBackground(with store: QiitaStore & QiitaImageStore) {
+        let scene = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
+        scene.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
     }
 
     private func makeData(for url: URL) -> Data {
