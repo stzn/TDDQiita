@@ -16,7 +16,7 @@ class ValidateQiitaCacheTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages.count, 0)
     }
 
-    func testValidateCacheWithNotExpiredCache() {
+    func testValidateCacheWithNonExpiredCache() {
         let (loader, store) = makeTestTarget()
         let currentDate = Date()
         let timestamp = currentDate.minusQiitaCacheMaxAge().advanced(by: 1)

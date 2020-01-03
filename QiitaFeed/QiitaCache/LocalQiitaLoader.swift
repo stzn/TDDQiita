@@ -25,7 +25,7 @@ public final class LocalQiitaLoader {
         self.currentDate = currentDate
     }
 
-    func validateCache() {
+    public func validateCache() {
         store.get { [weak self] result in
             guard let self = self else {
                 return

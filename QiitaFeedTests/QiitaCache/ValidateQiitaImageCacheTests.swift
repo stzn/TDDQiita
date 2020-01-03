@@ -16,7 +16,7 @@ class ValidateQiitaImageCacheTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages.count, 0)
     }
 
-    func testValidateCacheWithNoExpiredCache() {
+    func testValidateCacheWithNonExpiredCache() {
         let (loader, store) = makeTestTarget()
         let currentDate = Date()
         let url = anyURL

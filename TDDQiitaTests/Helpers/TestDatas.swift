@@ -33,3 +33,7 @@ var anyUser: QiitaItem.User {
 var anyNSError: NSError {
     NSError(domain: UUID().uuidString, code: -1, userInfo: nil)
 }
+
+var anyData: Data {
+    Data(UUID().uuidString.utf8)
+}

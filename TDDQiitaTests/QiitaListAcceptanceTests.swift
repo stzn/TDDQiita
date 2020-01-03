@@ -48,6 +48,24 @@ class QiitaListAcceptanceTests: XCTestCase {
         XCTAssertEqual(viewController.numberOfRows, 0)
     }
 
+    func testValidateCacheExpiredCacheWhenEnterBackground() {
+        let store = InMemoryQiitaStore.withExpiredCache
+        let scene = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
+        scene.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
+
+        XCTAssertNil(store.item)
+        XCTAssertTrue(store.images.isEmpty)
+    }
+
+    func testValidateCacheNonExpiredCacheWhenEnterBackground() {
+        let store = InMemoryQiitaStore.withNonExpiredCache
+        let scene = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
+        scene.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
+
+        XCTAssertNotNil(store.item)
+        XCTAssertFalse(store.images.isEmpty)
+    }
+
     // MARK: - Helpers
     private func launch(
         httpClient: HTTPClientStub = .offline,
@@ -107,5 +125,21 @@ class QiitaListAcceptanceTests: XCTestCase {
 extension InMemoryQiitaStore {
     static var empty: InMemoryQiitaStore {
         InMemoryQiitaStore()
+    }
+
+    static var withExpiredCache: InMemoryQiitaStore {
+        let timestamp = Date().minusQiitaCacheMaxAge().advanced(by: -1)
+        let url = anyURL
+        return InMemoryQiitaStore(
+            item: CachedQiitaItem(items: [anyQiitaItem], timestamp: timestamp),
+            images: [url: CachedQiitaImage(url: url, data: anyData, timestamp: timestamp)])
+    }
+
+    static var withNonExpiredCache: InMemoryQiitaStore {
+        let timestamp = Date().minusQiitaCacheMaxAge().advanced(by: 1)
+        let url = anyURL
+        return InMemoryQiitaStore(
+            item: CachedQiitaItem(items: [anyQiitaItem], timestamp: timestamp),
+            images: [url: CachedQiitaImage(url: url, data: anyData, timestamp: timestamp)])
     }
 }
