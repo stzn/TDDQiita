@@ -24,4 +24,8 @@ public protocol QiitaImageStore {
     typealias DeleteResult = Result<Void, Error>
     typealias DeleteCompletion = (DeleteResult) -> Void
     func delete(for url: URL, completion: @escaping DeleteCompletion)
+
+    typealias DeleteAllResult = Result<Void, Error>
+    typealias DeleteAllCompletion = (DeleteAllResult) -> Void
+    func deleteAll(completion: @escaping DeleteAllCompletion)
 }

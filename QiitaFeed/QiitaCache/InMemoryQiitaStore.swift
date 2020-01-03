@@ -52,4 +52,9 @@ extension InMemoryQiitaStore: QiitaImageStore {
         images[url] = nil
         completion(.success(()))
     }
+
+    public func deleteAll(completion: @escaping (QiitaImageStore.DeleteAllResult) -> Void) {
+        images.removeAll()
+        completion(.success(()))
+    }
 }

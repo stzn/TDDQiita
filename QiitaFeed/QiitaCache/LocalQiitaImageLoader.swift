@@ -62,7 +62,7 @@ extension LocalQiitaImageLoader: QiitaImageLoader {
             case .success(let images):
                 self.validateAll(images: images)
             case .failure:
-                break
+                self.deleteAll()
             }
         }
     }
@@ -74,6 +74,10 @@ extension LocalQiitaImageLoader: QiitaImageLoader {
                 store.delete(for: image.url) { _ in }
             }
         }
+    }
+
+    private func deleteAll() {
+        store.deleteAll { _ in }
     }
 }
 

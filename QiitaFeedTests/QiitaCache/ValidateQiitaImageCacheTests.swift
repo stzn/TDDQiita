@@ -38,6 +38,13 @@ class ValidateQiitaImageCacheTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.getAll, .delete(url)])
     }
 
+    func testValidateCacheWithGetErrorAllCacheDelete() {
+        let (loader, store) = makeTestTarget()
+        loader.validateCache()
+        store.completeWith(result: .failure(anyNSError))
+        XCTAssertEqual(store.receivedMessages, [.getAll, .deleteAll])
+    }
+
     // MARK: Helpers
     private func makeTestTarget(currentDate: @escaping () -> Date = Date.init,
                                 file: StaticString = #file, line: UInt = #line)

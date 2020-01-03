@@ -16,6 +16,7 @@ final class QiitaImageStoreSpy: QiitaImageStore {
         case getAll
         case save(URL)
         case delete(URL)
+        case deleteAll
     }
 
     var receivedMessages: [ReceivedMessage] = []
@@ -24,6 +25,7 @@ final class QiitaImageStoreSpy: QiitaImageStore {
     var receivedGetAllCompletions: [GetAllCompletion] = []
     var receivedSaveCompletions: [URL: SaveCompletion] = [:]
     var receivedDeleteCompletions: [URL: DeleteCompletion] = [:]
+    var receivedDeleteAllCompletions: [DeleteAllCompletion] = []
 
     func get(for url: URL, completion: @escaping GetCompletion) {
         receivedGetCompletions[url] = completion
@@ -59,5 +61,10 @@ final class QiitaImageStoreSpy: QiitaImageStore {
 
     func completeDeleteWith(result: DeleteResult, for url: URL) {
         receivedDeleteCompletions[url]!(result)
+    }
+
+    func deleteAll(completion: @escaping DeleteAllCompletion) {
+        receivedDeleteAllCompletions.append(completion)
+        receivedMessages.append(.deleteAll)
     }
 }
