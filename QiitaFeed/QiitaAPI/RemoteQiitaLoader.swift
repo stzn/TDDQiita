@@ -76,10 +76,9 @@ public final class RemoteQiitaLoader: PaginationQiitaLoader {
     }
 
     private func handleResult(data: Data, response: HTTPURLResponse) -> PaginationQiitaLoader.Result {
-        setPagination(from: response)
-
         do {
             let items = try QiitaAPIDecoder.decode(from: data)
+            setPagination(from: response)
             return .success(items)
         } catch {
             return .failure(Error.invalidData)
