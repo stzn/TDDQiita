@@ -110,7 +110,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         case (.failure(let received), .failure(let expected)):
             XCTAssertEqual(received as NSError, expected as NSError, file: file, line: line)
         default:
-            XCTFail("expect \(expected), but got \(received!)")
+            XCTFail("expect \(expected), but got \(received!)", file: file, line: line)
         }
     }
 

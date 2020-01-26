@@ -11,11 +11,14 @@ import Foundation
 extension URLSessionDataTask: HTTPClientTask {}
 
 public final class URLSessionHTTPClient: HTTPClient {
-    public init() {}
+    private let session: URLSession
+    public init(session: URLSession = .shared) {
+        self.session = session
+    }
 
     @discardableResult
     public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        let task = session.dataTask(with: url) { data, response, error in
             if let error = error {
                 completion(.failure(.unknown(error)))
                 return
