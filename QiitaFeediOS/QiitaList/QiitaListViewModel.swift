@@ -22,8 +22,11 @@ public final class QiitaListViewModel {
     func load() {
         onLoadStateChange?()
         loader.loadNext { [weak self] result in
-            self?.handleResult(result: result)
-            self?.onLoadStateChange?()
+            guard let self = self else {
+                return
+            }
+            self.handleResult(result: result)
+            self.onLoadStateChange?()
         }
     }
 

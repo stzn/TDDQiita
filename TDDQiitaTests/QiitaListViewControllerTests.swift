@@ -20,14 +20,16 @@ class QiitaListViewControllerTests: XCTestCase {
 
     func testViewDidLoadDataLoaded() {
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
         XCTAssertEqual(loader.receivedCompletions.count, 1)
     }
 
     func testShowIndicatorWhenDataLoading() {
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         XCTAssertEqual(viewController.isLoadingIndicatorShowing, true)
+
         loader.complete(with: .success([anyQiitaItem]), at: 0)
         XCTAssertEqual(viewController.isLoadingIndicatorShowing, false)
         XCTAssertEqual(loader.receivedCompletions.count, 1)
@@ -47,7 +49,8 @@ class QiitaListViewControllerTests: XCTestCase {
 
     func testHideIndicatorEvenErrorOccured() {
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         XCTAssertEqual(viewController.isLoadingIndicatorShowing, true)
         loader.complete(with: .failure(anyNSError), at: 0)
         XCTAssertEqual(viewController.isLoadingIndicatorShowing, false)
@@ -76,7 +79,8 @@ class QiitaListViewControllerTests: XCTestCase {
         let item3 = anyQiitaItem
 
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         assertThat(viewController: viewController, isRendering: [])
 
         loader.complete(with: .success([item]))
@@ -90,7 +94,8 @@ class QiitaListViewControllerTests: XCTestCase {
         let item = anyQiitaItem
 
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         loader.complete(with: .success([item]))
         assertThat(viewController: viewController, isRendering: [item])
 
@@ -100,7 +105,8 @@ class QiitaListViewControllerTests: XCTestCase {
 
     func testErrorMessageRenderedOnError() {
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         XCTAssertNil(viewController.errorMesage)
 
         loader.complete(with: .failure(anyNSError))
@@ -114,9 +120,10 @@ class QiitaListViewControllerTests: XCTestCase {
         let item0 = anyQiitaItem
         let item1 = anyQiitaItem
         let (viewController, loader) = makeTestTarget()
+        viewController.simulateViewWillAppear()
 
-        viewController.loadViewIfNeeded()
         loader.complete(with: .success([item0, item1]))
+
         viewController.simulateRenderedViewVisible(at: 0)
         XCTAssertEqual(loader.receivedURLs, [item0.userImageURL])
         viewController.simulateRenderedViewVisible(at: 1)
@@ -127,8 +134,8 @@ class QiitaListViewControllerTests: XCTestCase {
         let item0 = anyQiitaItem
         let item1 = anyQiitaItem
         let (viewController, loader) = makeTestTarget()
+        viewController.simulateViewWillAppear()
 
-        viewController.loadViewIfNeeded()
         loader.complete(with: .success([item0, item1]))
 
         let view0 = viewController.simulateRenderedViewNotVisible(at: 0)
@@ -144,7 +151,8 @@ class QiitaListViewControllerTests: XCTestCase {
 
     func testShowIndicatorWhenImageLoading() {
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         loader.complete(with: .success([anyQiitaItem, anyQiitaItem]))
         let view0 = viewController.simulateRenderedViewVisible(at: 0)!
         let view1 = viewController.simulateRenderedViewVisible(at: 1)!
@@ -161,7 +169,8 @@ class QiitaListViewControllerTests: XCTestCase {
 
     func testImageRenderFromURLWhenCellVisible() {
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         loader.complete(with: .success([anyQiitaItem, anyQiitaItem]))
 
         let view0 = viewController.simulateRenderedViewVisible(at: 0)!
@@ -182,8 +191,8 @@ class QiitaListViewControllerTests: XCTestCase {
 
     func testNoUserImageRenderWhenInvalidDataLoaded() {
         let (viewController, loader) = makeTestTarget()
+        viewController.simulateViewWillAppear()
 
-        viewController.loadViewIfNeeded()
         loader.complete(with: .success([anyQiitaItem, anyQiitaItem]))
 
         let view0 = viewController.simulateRenderedViewVisible(at: 0)
@@ -193,8 +202,8 @@ class QiitaListViewControllerTests: XCTestCase {
 
     func testNoUserImageRenderWhenErrorOccured() {
         let (viewController, loader) = makeTestTarget()
+        viewController.simulateViewWillAppear()
 
-        viewController.loadViewIfNeeded()
         loader.complete(with: .success([anyQiitaItem]))
 
         let view0 = viewController.simulateRenderedViewVisible(at: 0)
@@ -206,8 +215,8 @@ class QiitaListViewControllerTests: XCTestCase {
         let item0 = anyQiitaItem
         let item1 = anyQiitaItem
         let (viewController, loader) = makeTestTarget()
+        viewController.simulateViewWillAppear()
 
-        viewController.loadViewIfNeeded()
         loader.complete(with: .success([item0, item1]))
 
         viewController.simulateRenderedViewNotVisible(at: 0)
@@ -224,8 +233,10 @@ class QiitaListViewControllerTests: XCTestCase {
         let item1 = anyQiitaItem
 
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         loader.complete(with: .success([item0, item1]))
+
         viewController.simulateRenderedViewNearVisible(at: 0)
         XCTAssertEqual(loader.receivedURLs, [item0.userImageURL!])
 
@@ -238,8 +249,10 @@ class QiitaListViewControllerTests: XCTestCase {
         let item1 = anyQiitaItem
 
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         loader.complete(with: .success([item0, item1]))
+
         viewController.simulateRenderedViewNotNearVisible(at: 0)
         XCTAssertEqual(loader.canceledURLs, [item0.userImageURL!])
 
@@ -249,7 +262,8 @@ class QiitaListViewControllerTests: XCTestCase {
 
     func testLoadMoreReqeustNextDataLoaded() {
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         XCTAssertEqual(loader.receivedCompletions.count, 1)
 
         loader.complete(with: .success([anyQiitaItem]))
@@ -263,7 +277,8 @@ class QiitaListViewControllerTests: XCTestCase {
         let item1 = anyQiitaItem
 
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         XCTAssertEqual(viewController.numberOfRows, 0)
 
         loader.complete(with: .success([item0]), at: 0)
@@ -281,7 +296,8 @@ class QiitaListViewControllerTests: XCTestCase {
     func testLoadMoreNotRenderNextErrorOccured() {
         let item = anyQiitaItem
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         XCTAssertEqual(viewController.numberOfRows, 0)
         loader.complete(with: .success([item]), at: 0)
         XCTAssertEqual(viewController.numberOfRows, 1)
@@ -299,7 +315,8 @@ class QiitaListViewControllerTests: XCTestCase {
         let item2 = anyQiitaItem
 
         let (viewController, loader) = makeTestTarget()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         XCTAssertEqual(viewController.numberOfRows, 0)
 
         loader.complete(with: .success([item0]), at: 0)

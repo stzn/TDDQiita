@@ -19,6 +19,6 @@ class SceneDelegateTests: XCTestCase {
 
         let root = scene.window?.rootViewController
 
-        XCTAssertTrue(root is QiitaListViewController)
+        XCTAssertTrue(root is UINavigationController)
     }
 }

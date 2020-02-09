@@ -15,7 +15,8 @@ import QiitaFeediOS
 class QiitaListAcceptanceTests: XCTestCase {
     func testOnLaunchDisplayRemoteQiitaItemWhenUserHasConnectivity() {
         let viewController = launch(httpClient: .online(response))
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         XCTAssertEqual(viewController.numberOfRows, 2)
 
         let cell0 = viewController.simulateRenderedViewVisible(at: 0)
@@ -28,12 +29,14 @@ class QiitaListAcceptanceTests: XCTestCase {
         let store = InMemoryQiitaStore.empty
 
         let onlineViewController = launch(httpClient: .online(response), store: store)
-        onlineViewController.loadViewIfNeeded()
+        onlineViewController.simulateViewWillAppear()
+
         onlineViewController.simulateRenderedViewVisible(at: 0)
         onlineViewController.simulateRenderedViewVisible(at: 1)
 
         let offlineViewController = launch(httpClient: .offline, store: store)
-        offlineViewController.loadViewIfNeeded()
+        offlineViewController.simulateViewWillAppear()
+
         XCTAssertEqual(offlineViewController.numberOfRows, 2)
 
         let cell0 = offlineViewController.simulateRenderedViewVisible(at: 0)
@@ -44,7 +47,8 @@ class QiitaListAcceptanceTests: XCTestCase {
 
     func testOnLaunchDisplayRemoteQiitaItemWhenUserHasNoCacheAndNoConnectivity() {
         let viewController = launch()
-        viewController.loadViewIfNeeded()
+        viewController.simulateViewWillAppear()
+
         XCTAssertEqual(viewController.numberOfRows, 0)
     }
 

@@ -38,6 +38,10 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
         super.viewDidLoad()
         setRefreshControl()
         setupTableView()
+    }
+
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         load(shouldRefresh: false)
     }
 

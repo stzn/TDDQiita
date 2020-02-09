@@ -76,4 +76,9 @@ extension QiitaListViewController {
     var noUserImageData: Data {
         noUserImage.pngData()!
     }
+
+    func simulateViewWillAppear() {
+        loadViewIfNeeded()
+        beginAppearanceTransition(true, animated: false)
+    }
 }
