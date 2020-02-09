@@ -66,7 +66,9 @@ public final class RemoteQiitaLoader: PaginationQiitaLoader {
                 return
             }
             switch result {
-            case .success(let data, let response):
+            case .success(let success):
+                let data = success.0
+                let response = success.1
                 let result = self.handleResult(data: data, response: response)
                 completion(result)
             case .failure:
