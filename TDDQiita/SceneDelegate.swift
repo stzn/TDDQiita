@@ -52,15 +52,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                                                   perPageItemsCount: perPageItemsCount)
         let remoteQiitaImageLoader = RemoteQiitaImageLoader(client: httpClient)
 
-        window?.rootViewController = QiitaListUIComposer.composeQiitaListViewController(
-            listLoader: PaginationQiitaLoaderWithFallback(
-                primary: QiitaCacheDecorator(decoratee: remoteQiitaLoader,
-                                             cache: localQiitaLoader),
-                fallback: localQiitaLoader),
-            imageLoader: QiitaImageLoaderWithFallback(
-                primary: QiitaImageCacheDecorator(decoratee: remoteQiitaImageLoader,
-                                                  cache: localQiitaImageLoader),
-                fallback: localQiitaImageLoader))
+        window?.rootViewController = UINavigationController(
+            rootViewController: QiitaListUIComposer.composeQiitaListViewController(
+                listLoader: PaginationQiitaLoaderWithFallback(
+                    primary: QiitaCacheDecorator(decoratee: remoteQiitaLoader,
+                                                 cache: localQiitaLoader),
+                    fallback: localQiitaLoader),
+                imageLoader: QiitaImageLoaderWithFallback(
+                    primary: QiitaImageCacheDecorator(decoratee: remoteQiitaImageLoader,
+                                                      cache: localQiitaImageLoader),
+                    fallback: localQiitaImageLoader)))
     }
 
     func sceneWillResignActive(_ scene: UIScene) {

@@ -17,7 +17,7 @@ public final class QiitaListViewController: UIViewController, StoryboardInstanti
         case main
     }
 
-    public var cellControllers: [QiitaListCellController] = []
+    private var cellControllers: [QiitaListCellController] = []
     public var viewModel: QiitaListViewModel!
 
     private var dataSource: UITableViewDiffableDataSource<Section, DisplayQiitaItem>!

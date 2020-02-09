@@ -74,7 +74,9 @@ class QiitaListAcceptanceTests: XCTestCase {
         scene.configureWindow()
 
         // swiftlint:disable:next force_cast
-        return scene.window?.rootViewController as! QiitaListViewController
+        let nav = scene.window?.rootViewController as! UINavigationController
+        // swiftlint:disable:next force_cast
+        return nav.topViewController as! QiitaListViewController
     }
 
     private func enterBackground(with store: QiitaStore & QiitaImageStore) {
